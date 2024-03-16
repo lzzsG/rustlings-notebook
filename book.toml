@@ -1,0 +1,18 @@
+[book]
+authors = ["lzzsG"]
+language = "en"
+multilingual = false
+src = "src"
+title = "rustlings-notebook"
+
+
+[output.html]
+site-url = "/rustlings-notebook/"
+default-theme = "black"
+preferred-dark-theme = "black"
+git-repository-url = "https://github.com/lzzsG/rustlings-notebook"
+git-repository-icon = "fa-github"
+
+
+[output.html.playground]
+editable = true
