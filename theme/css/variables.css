@@ -1,15 +1,15 @@
 /* Globals */
 
 :root {
-    --sidebar-width: 240px;
+    --sidebar-width: 250px;
     --sidebar-resize-indicator-width: 7px;
-    --sidebar-resize-indicator-space: 2px;
-    --page-padding: 15px;
-    --content-max-width: 800px;
+    --sidebar-resize-indicator-space: 0px;
+    --page-padding: 0px;
+    --content-max-width: 930px;
     --menu-bar-height: 50px;
     --mono-font: "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace;
-    --code-font-size: 0.875em
-        /* please adjust the ace font size accordingly in editor.js */
+    --code-font-size: 0.875em;
+    --content-toc-fg: #c5c5c5;
 }
 
 /* Themes */
@@ -42,7 +42,7 @@
 
     --warning-border: #ff8e00;
 
-    --table-border-color: hsl(210, 25%, 13%);
+    --table-border-color: hsl(210, 25%, 18%);
     --table-header-bg: hsl(210, 25%, 28%);
     --table-alternate-bg: hsl(210, 25%, 11%);
 
@@ -65,8 +65,8 @@
 
     --sidebar-bg: #222222;
     --sidebar-fg: #dddddd;
-    --sidebar-non-existant: #4d4d4d;
-    --sidebar-active: #ffffff;
+    --sidebar-non-existant: #6d6d6d;
+    --sidebar-active: #ebebeb;
     --sidebar-spacer: #393939;
 
     --scrollbar: var(--sidebar-fg);
@@ -74,7 +74,7 @@
     --icons: #777777;
     --icons-hover: #ffffff;
 
-    --links: #379bd1;
+    --links: #0274b1;
 
     --inline-code-color: #ffffff;
 
@@ -133,7 +133,7 @@
 
     --warning-border: #ff8e00;
 
-    --table-border-color: hsl(200, 7%, 13%);
+    --table-border-color: hsl(200, 7%, 16%);
     --table-header-bg: hsl(200, 7%, 28%);
     --table-alternate-bg: hsl(200, 7%, 11%);
 
@@ -161,7 +161,7 @@
     --sidebar-active: #1f1fff;
     --sidebar-spacer: #f4f4f4;
 
-    --scrollbar: #8F8F8F;
+    --scrollbar: #9f9f9f;
 
     --icons: #747474;
     --icons-hover: #000000;
@@ -179,7 +179,7 @@
 
     --warning-border: #ff8e00;
 
-    --table-border-color: hsl(0, 0%, 95%);
+    --table-border-color: hsl(0, 0%, 90%);
     --table-header-bg: hsl(0, 0%, 80%);
     --table-alternate-bg: hsl(0, 0%, 97%);
 
@@ -225,7 +225,7 @@
 
     --warning-border: #ff8e00;
 
-    --table-border-color: hsl(226, 23%, 16%);
+    --table-border-color: hsl(226, 23%, 20%);
     --table-header-bg: hsl(226, 23%, 31%);
     --table-alternate-bg: hsl(226, 23%, 14%);
 
@@ -271,7 +271,7 @@
 
     --warning-border: #ff8e00;
 
-    --table-border-color: hsl(60, 9%, 82%);
+    --table-border-color: hsl(60, 9%, 75%);
     --table-header-bg: #b3a497;
     --table-alternate-bg: hsl(60, 9%, 84%);
 

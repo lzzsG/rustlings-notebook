@@ -702,7 +702,7 @@ function playground_text(playground, hidden = true) {
     (function controllBorder() {
         function updateBorder() {
             if (menu.offsetTop === 0) {
-                menu.classList.remove('bordered');
+                menu.classList.add('bordered');
             } else {
                 menu.classList.add('bordered');
             }
@@ -711,3 +711,50 @@ function playground_text(playground, hidden = true) {
         document.addEventListener('scroll', updateBorder, { passive: true });
     })();
 })();
+
+document.addEventListener('DOMContentLoaded', function () {
+    const headings = document.querySelector('main').querySelectorAll('h1, h2, h3, h4');
+    const tocContainer = document.getElementById('current-content-toc');
+
+    let tocContent = '<ul class="toc-list">'; // 为<ul>添加类名
+    headings.forEach(function (heading) {
+        const level = parseInt(heading.tagName.substring(1)) - 1;
+        const id = heading.id || heading.textContent.trim().replace(/\s+/g, '-');
+        heading.id = id;
+        tocContent += `<li style="margin-left: ${level * 12}px;"><a href="#${id}">${heading.textContent}</a></li>`;
+    });
+    tocContent += '</ul>';
+
+    tocContainer.innerHTML = tocContent;
+});
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const sections = document.querySelectorAll("main h1, main h2, main h3, main h4");
+    const navLinks = document.querySelectorAll(".current-content-toc a");
+    let allowScrollUpdate = true; // 控制变量
+
+    function activateLink() {
+        if (!allowScrollUpdate) return; // 如果不允许更新，则直接返回
+        let index = sections.length;
+        while (--index && window.scrollY + 75 < sections[index].offsetTop) { }
+        navLinks.forEach(link => link.classList.remove('active'));
+        const activeSection = sections[index]?.getAttribute('id');
+        const activeLink = document.querySelector(`.current-content-toc a[href="#${activeSection}"]`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
+    }
+
+    window.addEventListener('scroll', activateLink);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function () {
+            navLinks.forEach(lnk => lnk.classList.remove('active'));
+            link.classList.add('active');
+            allowScrollUpdate = false; // 点击后暂时禁止滚动更新
+            setTimeout(() => { allowScrollUpdate = true; }, 100); // 100毫秒后重新允许滚动更新
+        });
+    });
+});

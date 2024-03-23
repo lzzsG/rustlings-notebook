@@ -145,6 +145,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
+
                 {{> header}}
                 <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
@@ -250,45 +251,46 @@
 
                 <div id="content" class="content">
                     <main>
-                        {{{ content }}}
+
+                        <div id="content-area" class="content-area">
+                            <div id="content-area-inside" class="content-area-inside">
+
+                                {{{ content }}}
+
+                            </div>
+
+                            <nav class="nav-wrapper" aria-label="Page navigation">
+                                <!-- Mobile navigation buttons -->
+                                {{#previous}}
+                                <a rel="prev" href="{{ path_to_root }}{{link}}" class="mobile-nav-chapters previous"
+                                    title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                    <i class="fa fa-angle-left"></i>
+                                </a>
+                                {{/previous}}
+
+                                {{#next}}
+                                <a rel="next prefetch" href="{{ path_to_root }}{{link}}"
+                                    class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter"
+                                    aria-keyshortcuts="Right">
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                                {{/next}}
+
+                                <div style="clear: both"></div>
+                            </nav>
+                        </div>
+
                     </main>
 
-                    <nav class="nav-wrapper" aria-label="Page navigation">
-                        <!-- Mobile navigation buttons -->
-                        {{#previous}}
-                        <a rel="prev" href="{{ path_to_root }}{{link}}" class="mobile-nav-chapters previous"
-                            title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
-                            <i class="fa fa-angle-left"></i>
-                        </a>
-                        {{/previous}}
-
-                        {{#next}}
-                        <a rel="next prefetch" href="{{ path_to_root }}{{link}}" class="mobile-nav-chapters next"
-                            title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                            <i class="fa fa-angle-right"></i>
-                        </a>
-                        {{/next}}
-
-                        <div style="clear: both"></div>
+                    <nav id="current-content-toc" class="current-content-toc">
+                        <!-- 文章结构目录将在这里动态生成 -->
                     </nav>
+
                 </div>
+
+
             </div>
 
-            <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                {{#previous}}
-                <a rel="prev" href="{{ path_to_root }}{{link}}" class="nav-chapters previous" title="Previous chapter"
-                    aria-label="Previous chapter" aria-keyshortcuts="Left">
-                    <i class="fa fa-angle-left"></i>
-                </a>
-                {{/previous}}
-
-                {{#next}}
-                <a rel="next prefetch" href="{{ path_to_root }}{{link}}" class="nav-chapters next" title="Next chapter"
-                    aria-label="Next chapter" aria-keyshortcuts="Right">
-                    <i class="fa fa-angle-right"></i>
-                </a>
-                {{/next}}
-            </nav>
 
         </div>
 
