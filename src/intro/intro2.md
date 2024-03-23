@@ -2,12 +2,9 @@
 
 - Name: ```intro2```
 - Path: ```exercises/intro/intro2.rs```
-#### Hint: 
+
+#### Hint
 
 Add an argument after the format string.
 
-
 ---
-
-
-
