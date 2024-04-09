@@ -50,21 +50,23 @@ fn call_me(num: u32) {
   - 为了修复编译错误并正确调用`call_me`函数，我们需要在调用`call_me`时提供一个`u32`类型的参数。可以选择任意的`u32`值作为参数传递给`call_me`函数。
 
 - **代码示例**：
-    ```rust
-    // functions3.rs
-    // 已完成练习
     
-    fn main() {
-        call_me(3); // 向`call_me`函数传递了一个u32类型的参数
+
+```rust
+// functions3.rs
+// 已完成练习
+
+fn main() {
+    call_me(3); // 向`call_me`函数传递了一个u32类型的参数
+}
+
+fn call_me(num: u32) {
+    for i in 0..num {
+        println!("Ring! Call number {}", i + 1);
     }
-    
-    fn call_me(num: u32) {
-        for i in 0..num {
-            println!("Ring! Call number {}", i + 1);
-        }
-    }
-    ```
-    在这个修正后的版本中，我们通过向`call_me`函数传递一个参数`3`（一个`u32`类型的值）来满足函数定义的要求。这样，当`main`函数运行并调用`call_me(3)`时，它将按照期望打印三次"Ring! Call number X"，其中X是从1开始的序号。这个练习展示了如何在Rust中正确地调用需要参数的函数。
+}
+```
+在这个修正后的版本中，我们通过向`call_me`函数传递一个参数`3`（一个`u32`类型的值）来满足函数定义的要求。这样，当`main`函数运行并调用`call_me(3)`时，它将按照期望打印三次"Ring! Call number X"，其中X是从1开始的序号。这个练习展示了如何在Rust中正确地调用需要参数的函数。
 
 ## 扩展知识点与解答：
 
@@ -90,22 +92,24 @@ fn call_me(num: u32) {
   - 定义一个接受向量或切片作为参数的函数，可以处理任意数量的输入。
 
 - **代码示例（模拟默认参数）**：
-    ```rust
-    #[derive(Default)]
-    struct CallParams {
-        num: u32,
-        // 可以添加更多字段
-    }
     
-    fn call_me_with_params(params: CallParams) {
-        for i in 0..params.num {
-            println!("Ring! Call number {}", i + 1);
-        }
+
+```rust
+#[derive(Default)]
+struct CallParams {
+    num: u32,
+    // 可以添加更多字段
+}
+
+fn call_me_with_params(params: CallParams) {
+    for i in 0..params.num {
+        println!("Ring! Call number {}", i + 1);
     }
-    
-    fn main() {
-        let params = CallParams { num: 3, ..CallParams::default() };
-        call_me_with_params(params);
-    }
-    ```
-    这个示例中，`CallParams`结构体包含`call_me`函数所需的参数。通过实现`Default`特征，我们可以创建带有默认值的`params`实例，这类似于使用默认参数。
+}
+
+fn main() {
+    let params = CallParams { num: 3, ..CallParams::default() };
+    call_me_with_params(params);
+}
+```
+这个示例中，`CallParams`结构体包含`call_me`函数所需的参数。通过实现`Default`特征，我们可以创建带有默认值的`params`实例，这类似于使用默认参数。

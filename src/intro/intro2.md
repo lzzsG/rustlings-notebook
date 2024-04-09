@@ -41,16 +41,18 @@ fn main() {
 - **步骤描述**：为了完成这个练习，我们需要向`println!`宏的字符串参数后添加一个实际的参数，以替换字符串中的`{}`占位符。给定的代码意图是打印一条问候语，所以我们可以传递一个表示"world"或其他任何对象的字符串字面值作为参数。
 
 - **代码示例**：
-    ```rust
-    // intro2.rs
-    // 已完成练习
     
-    fn main() {
-        // 在字符串"Hello {}!"中的占位符{}后添加了一个实际的参数"world"
-        println!("Hello {}!", "world");
-    }
-    ```
-    在这个修正后的版本中，我们向`println!`宏添加了`"world"`作为参数，这样它就会在打印时替换字符串中的`{}`。执行后，终端将显示消息"Hello world!"，成功完成了向世界问好的任务。
+
+```rust
+// intro2.rs
+// 已完成练习
+
+fn main() {
+    // 在字符串"Hello {}!"中的占位符{}后添加了一个实际的参数"world"
+    println!("Hello {}!", "world");
+}
+```
+在这个修正后的版本中，我们向`println!`宏添加了`"world"`作为参数，这样它就会在打印时替换字符串中的`{}`。执行后，终端将显示消息"Hello world!"，成功完成了向世界问好的任务。
 
 
 
@@ -74,26 +76,26 @@ fn main() {
 
 - **使用命名参数**：
   Rust的格式化字符串支持命名参数，这使得复杂字符串的构建更加直观和易于管理。
-
 - **代码示例（命名参数）**：
-    ```rust
-    fn main() {
-        let target = "world";
-        println!("Hello {target}!");
-    }
-    ```
-  在这个示例中，我们使用了一个命名参数`target`来替代占位符。这种方式让代码更加清晰，尤其是在字符串格式化中有多个参数需要替换时。
+
+```rust
+fn main() {
+    let target = "world";
+    println!("Hello {target}!");
+}
+```
+在这个示例中，我们使用了一个命名参数`target`来替代占位符。这种方式让代码更加清晰，尤其是在字符串格式化中有多个参数需要替换时。
 
 - **条件编译日志消息**：
   在开发中，你可能希望在调试版本中打印额外的日志信息，而在发布版本中省略这些信息。Rust通过条件编译提供了这种灵活性。
-
 - **代码示例（条件编译）**：
-    ```rust
-    fn main() {
-        println!("Hello, world!");
-        
-        #[cfg(debug_assertions)]
-        println!("This message is visible in debug mode only.");
-    }
-    ```
-  使用`#[cfg(debug_assertions)]`属性，上述的第二条`println!`仅在编译调试版本时执行，这对于调试非常有用。
+
+```rust
+fn main() {
+    println!("Hello, world!");
+    
+    #[cfg(debug_assertions)]
+    println!("This message is visible in debug mode only.");
+}
+```
+使用`#[cfg(debug_assertions)]`属性，上述的第二条`println!`仅在编译调试版本时执行，这对于调试非常有用。

@@ -55,20 +55,22 @@ fn square(num: i32) -> i32 {
   - 为了让`square`函数返回`num * num`的计算结果，需要确保这个计算是函数体中的最后一个表达式，并且后面没有分号。这样，它就不会被视为语句，而是一个值返回表达式。
 
 - **代码示例**：
-    ```rust
-    // functions5.rs
-    // 已完成练习
     
-    fn main() {
-        let answer = square(3);
-        println!("The square of 3 is {}", answer);
-    }
-    
-    fn square(num: i32) -> i32 {
-        num * num // 移除了分号，使其成为一个返回值的表达式
-    }
-    ```
-    在这个修正后的版本中，通过移除`num * num;`后面的分号，`square`函数现在能正确返回计算结果。因此，当`main`函数调用`square(3)`时，它将计算3的平方并返回结果9，然后打印出"The square of 3 is 9"。这个练习展示了如何在Rust函数中返回一个计算值，以及表达式和语句之间细微但重要的区别。
+
+```rust
+// functions5.rs
+// 已完成练习
+
+fn main() {
+    let answer = square(3);
+    println!("The square of 3 is {}", answer);
+}
+
+fn square(num: i32) -> i32 {
+    num * num // 移除了分号，使其成为一个返回值的表达式
+}
+```
+在这个修正后的版本中，通过移除`num * num;`后面的分号，`square`函数现在能正确返回计算结果。因此，当`main`函数调用`square(3)`时，它将计算3的平方并返回结果9，然后打印出"The square of 3 is 9"。这个练习展示了如何在Rust函数中返回一个计算值，以及表达式和语句之间细微但重要的区别。
 
 ## 扩展知识点与解答：
 
@@ -94,13 +96,15 @@ fn square(num: i32) -> i32 {
   - 通过理解Rust中表达式和语句的区别，可以更好地控制函数的返回值和侧效应，编写出更精炼和强大的逻辑。
 
 - **代码示例（使用`if`表达式返回值）**：
-    ```rust
-    fn bigger(a: i32, b: i32) -> i32 {
-        if a > b { a } else { b }
-    }
     
-    fn main() {
-        println!("Bigger number is: {}", bigger(42, 105));
-    }
-    ```
-    这个示例中，`bigger`函数利用`if`表达式的特性来决定并返回两个数中较大的一个。这里`if`表达式的结果直接作为函数的返回值，展示了Rust中表达式强大的表达能力。
+
+```rust
+fn bigger(a: i32, b: i32) -> i32 {
+    if a > b { a } else { b }
+}
+
+fn main() {
+    println!("Bigger number is: {}", bigger(42, 105));
+}
+```
+这个示例中，`bigger`函数利用`if`表达式的特性来决定并返回两个数中较大的一个。这里`if`表达式的结果直接作为函数的返回值，展示了Rust中表达式强大的表达能力。

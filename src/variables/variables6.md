@@ -8,11 +8,7 @@ We know about variables and mutability, but there is another important type of v
 
 Constants are always immutable and they are declared with keyword 'const' rather than keyword 'let'. Constants types must also always be annotated.
 
-Read more about constants and the differences between variables and constants under 'Constants' in the book's section 'Variables and Mutability':
-
-[https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#constants](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#constants)
-
-[Chinese version](https://rustwiki.org/zh-CN/book/ch03-01-variables-and-mutability.html#%E5%B8%B8%E9%87%8F)
+Read more about constants and the differences between variables and constants under 'Constants' in the book's section 'Variables and Mutability': [https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#constants](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html#constants) ([Chinese version](https://rustwiki.org/zh-CN/book/ch03-01-variables-and-mutability.html#%E5%B8%B8%E9%87%8F))
 
 ---
 

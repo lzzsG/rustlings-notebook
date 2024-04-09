@@ -46,20 +46,22 @@ fn main() {
   - 在`call_me`函数体内，你可以添加任何操作，比如打印一条消息，或者什么都不做。
 
 - **代码示例**：
-    ```rust
-    // functions1.rs
-    // 已完成练习
     
-    fn main() {
-        call_me();
-    }
-    
-    // 定义一个不接受参数也不返回值的函数`call_me`
-    fn call_me() {
-        println!("Called `call_me()`");
-    }
-    ```
-    在这个修正后的版本中，我们添加了一个新的函数`call_me`，正如`main`函数所期望的那样。当`main`函数运行并调用`call_me`时，它将执行`call_me`函数体内的代码，本例中是打印一条消息。这样，程序就能成功编译并运行，展示了如何在Rust中定义和调用简单的无参数、无返回值的函数。
+
+```rust
+// functions1.rs
+// 已完成练习
+
+fn main() {
+    call_me();
+}
+
+// 定义一个不接受参数也不返回值的函数`call_me`
+fn call_me() {
+    println!("Called `call_me()`");
+}
+```
+在这个修正后的版本中，我们添加了一个新的函数`call_me`，正如`main`函数所期望的那样。当`main`函数运行并调用`call_me`时，它将执行`call_me`函数体内的代码，本例中是打印一条消息。这样，程序就能成功编译并运行，展示了如何在Rust中定义和调用简单的无参数、无返回值的函数。
 
 ## 扩展知识点与解答：
 
@@ -85,16 +87,18 @@ fn main() {
   - 尝试定义一个接受参数并返回值的函数。通过这样的练习，你可以更好地理解函数如何与其他部分的Rust代码交互。
 
 - **代码示例（带参数和返回值的函数）**：
-    ```rust
-    fn main() {
-        let number = 5;
-        let result = add_one(number);
-        println!("{} plus 1 is {}", number, result);
-    }
     
-    // 定义一个接受i32类型参数并返回i32类型的函数
-    fn add_one(x: i32) -> i32 {
-        x + 1 // Rust中最后一个表达式的值会被自动返回，因此不需要`return`关键字
-    }
-    ```
-    这个示例中，`add_one`函数接受一个`i32`类型的参数并返回参数值加1的结果。在`main`函数中，我们调用`add_one`并打印结果。这展示了如何定义和使用带参数和返回值的函数。
+
+```rust
+fn main() {
+    let number = 5;
+    let result = add_one(number);
+    println!("{} plus 1 is {}", number, result);
+}
+
+// 定义一个接受i32类型参数并返回i32类型的函数
+fn add_one(x: i32) -> i32 {
+    x + 1 // Rust中最后一个表达式的值会被自动返回，因此不需要`return`关键字
+}
+```
+这个示例中，`add_one`函数接受一个`i32`类型的参数并返回参数值加1的结果。在`main`函数中，我们调用`add_one`并打印结果。这展示了如何定义和使用带参数和返回值的函数。

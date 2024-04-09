@@ -62,29 +62,31 @@ fn is_even(num: i32) -> bool {
   - 要解决这个问题，我们需要在`sale_price`函数签名中指定一个返回值类型。考虑到`price`是`i32`类型，且函数体中的操作也返回`i32`类型的结果，因此`sale_price`的返回类型应为`i32`。
 
 - **代码示例**：
-    ```rust
-    // functions4.rs
-    // 已完成练习
     
-    fn main() {
-        let original_price = 51;
-        println!("Your sale price is {}", sale_price(original_price));
+
+```rust
+// functions4.rs
+// 已完成练习
+
+fn main() {
+    let original_price = 51;
+    println!("Your sale price is {}", sale_price(original_price));
+}
+
+// 在函数签名中为返回值指定`i32`类型
+fn sale_price(price: i32) -> i32 {
+    if is_even(price) {
+        price - 10
+    } else {
+        price - 3
     }
-    
-    // 在函数签名中为返回值指定`i32`类型
-    fn sale_price(price: i32) -> i32 {
-        if is_even(price) {
-            price - 10
-        } else {
-            price - 3
-        }
-    }
-    
-    fn is_even(num: i32) -> bool {
-        num % 2 == 0
-    }
-    ```
-    在这个修正后的版本中，`sale_price`函数现在明确声明返回一个`i32`类型的值。这样，无论价格是奇数还是偶数，`sale_price`函数都会计算并返回调整后的价格。由于`original_price`被设为51（一个奇数），程序运行时将打印出"Your sale price is 48"。
+}
+
+fn is_even(num: i32) -> bool {
+    num % 2 == 0
+}
+```
+在这个修正后的版本中，`sale_price`函数现在明确声明返回一个`i32`类型的值。这样，无论价格是奇数还是偶数，`sale_price`函数都会计算并返回调整后的价格。由于`original_price`被设为51（一个奇数），程序运行时将打印出"Your sale price is 48"。
 
 ## 扩展知识点与解答：
 
@@ -110,28 +112,30 @@ fn is_even(num: i32) -> bool {
   - 在函数可能失败或返回空值的情况下，使用`Result`或`Option`类型作为返回值，而不是仅返回一个可能无法表示错误状态的普通值。
 
 - **代码示例（使用元组返回多个值）**：
-    ```rust
-    fn divide(dividend: f32, divisor: f32) -> Option<(f32, bool)> {
-        if divisor == 0.0 {
-            None
-        } else {
-            Some((dividend / divisor, dividend % divisor == 0.0))
-        }
-    }
     
-    fn main() {
-        let result = divide(10.0, 3.0);
-        match result {
-            Some((quotient, is_exact)) => {
-                println!("Quotient: {}", quotient);
-                if is_exact {
-                    println!("The division is exact.");
-                } else {
-                    println!("The division is not exact.");
-                }
-            },
-            None => println!("Cannot divide by 0"),
-        }
+
+```rust
+fn divide(dividend: f32, divisor: f32) -> Option<(f32, bool)> {
+    if divisor == 0.0 {
+        None
+    } else {
+        Some((dividend / divisor, dividend % divisor == 0.0))
     }
-    ```
-    这个示例展示了如何使用`Option`枚举和元组从函数返回复杂的结果。`divide`函数计算两个数的除法结果，并返回商以及除法是否精确。通过这种方式，函数的调用者可以更准确地了解操作的结果和状态。
+}
+
+fn main() {
+    let result = divide(10.0, 3.0);
+    match result {
+        Some((quotient, is_exact)) => {
+            println!("Quotient: {}", quotient);
+            if is_exact {
+                println!("The division is exact.");
+            } else {
+                println!("The division is not exact.");
+            }
+        },
+        None => println!("Cannot divide by 0"),
+    }
+}
+```
+这个示例展示了如何使用`Option`枚举和元组从函数返回复杂的结果。`divide`函数计算两个数的除法结果，并返回商以及除法是否精确。通过这种方式，函数的调用者可以更准确地了解操作的结果和状态。

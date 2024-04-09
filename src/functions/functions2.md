@@ -48,22 +48,24 @@ fn call_me(num:) {
   - 根据题目要求和Rust的规则，我们需要为`call_me`函数中的参数`num`添加一个类型注解。考虑到`num`被用作`for`循环的范围上限，合理的类型注解应该是某种整数类型。Rust中最常用的整数类型是`i32`。
 
 - **代码示例**：
-    ```rust
-    // functions2.rs
-    // 已完成练习
     
-    fn main() {
-        call_me(3);
+
+```rust
+// functions2.rs
+// 已完成练习
+
+fn main() {
+    call_me(3);
+}
+
+// 为`num`参数添加了类型注解`i32`
+fn call_me(num: i32) {
+    for i in 0..num {
+        println!("Ring! Call number {}", i + 1);
     }
-    
-    // 为`num`参数添加了类型注解`i32`
-    fn call_me(num: i32) {
-        for i in 0..num {
-            println!("Ring! Call number {}", i + 1);
-        }
-    }
-    ```
-    在这个修正后的版本中，我们为`call_me`函数的`num`参数添加了`: i32`类型注解，明确了它应该是一个32位整数。这样就满足了Rust函数签名对于类型注解的要求，代码现在可以正确编译和运行，每次调用`call_me(3);`将会打印三次"Ring! Call number X"，其中X是从1开始的呼叫次数。
+}
+```
+在这个修正后的版本中，我们为`call_me`函数的`num`参数添加了`: i32`类型注解，明确了它应该是一个32位整数。这样就满足了Rust函数签名对于类型注解的要求，代码现在可以正确编译和运行，每次调用`call_me(3);`将会打印三次"Ring! Call number X"，其中X是从1开始的呼叫次数。
 
 ## 扩展知识点与解答：
 
@@ -86,16 +88,18 @@ fn call_me(num:) {
   - 尝试定义一个泛型函数，它可以接受任意类型的参数，并根据参数执行操作。这有助于理解泛型如何提高函数的通用性和复用性。
 
 - **代码示例（使用泛型和`Display`特征）**：
-    ```rust
-    use std::fmt::Display;
     
-    fn print_me<T: Display>(item: T) {
-        println!("Printing: {}", item);
-    }
-    
-    fn main() {
-        print_me(3);         // 打印一个整数
-        print_me("Hello");  // 打印一个字符串
-    }
-    ```
-    在这个示例中，`print_me`函数使用泛型`T`，它要求`T`实现了`Display`特征，这使得几乎任何可打印的类型都可以作为其参数。这显示了如何使用泛型来创建可接受多种类型参数的函数。
+
+```rust
+use std::fmt::Display;
+
+fn print_me<T: Display>(item: T) {
+    println!("Printing: {}", item);
+}
+
+fn main() {
+    print_me(3);         // 打印一个整数
+    print_me("Hello");  // 打印一个字符串
+}
+```
+在这个示例中，`print_me`函数使用泛型`T`，它要求`T`实现了`Display`特征，这使得几乎任何可打印的类型都可以作为其参数。这显示了如何使用泛型来创建可接受多种类型参数的函数。
