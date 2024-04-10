@@ -46,7 +46,7 @@ fn main() {
     println!("000010011111101101011100000\nThese numbers seem to be guiding you.");
 
     let (x, y, marker) = artifact_location;
-    println!("The ancient artifact is located at ({}, {}) marked with a '{}'.", x, y, marker);
+    println!("The Ancient Artifact is located at ({}, {}) marked with a '{}'.", x, y, marker);
 
     println!("Double-checking, the artifact indeed lies at latitude {} and longitude {}.", artifact_location.0, artifact_location.1);
 

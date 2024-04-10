@@ -34,7 +34,7 @@ fn main() {
                 if index % 2 == 0 {
                     println!("The wizard, intrigued by your courage, casts a spell that increases your strength \nby {}.", numbers[index] * 3);
                 } else {
-                    println!("Windows to new dimensions unfold before your eyes, revealing {} paths to the \nancient artifact. 🌀", numbers[index] + 1000);
+                    println!("Windows to new dimensions unfold before your eyes, revealing {} paths to the \nAncient Artifact. 🌀", numbers[index] + 1000);
                 }
             } else {
                 if numbers[index] < 10 || numbers[index] == 27 {

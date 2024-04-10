@@ -37,7 +37,7 @@ fn main() {
     println!("After defeating the beast, you, {}, learn from the experience and \nbecome wiser.", your_name);
 
     const MAX_DANGERS: u32 = 110;
-    println!("You, {}, know there are up to {} challenges before reaching the \nancient artifact.", your_name, MAX_DANGERS);
+    println!("You, {}, know there are up to {} challenges before reaching the \nAncient Artifact.", your_name, MAX_DANGERS);
 
     let dangers_faced = dangers_faced + 1;
     let artifact_status = if dangers_faced > MAX_DANGERS {

@@ -31,8 +31,8 @@ fn main() {
     explore_scroll(copied_scroll);
     read_scroll(&ancient_scroll);
 
-    add_to_scroll(&mut ancient_scroll, "Beware of the guardian spirits.".to_string());
-    println!("The content of the scroll has been updated: {:?}!", ancient_scroll.content);
+    add_to_scroll(&mut ancient_scroll, "Beware of the guardian spirits!".to_string());
+    println!("The content of the scroll has been updated: {:?}\nYou're unmoved because you're aiming at Ancient Artifacts", ancient_scroll.content);
     println!("\n🌲🌲Your journey continues into the dark forest.🌲🌲\n🌲🌲The air, heavy with the promise of rain, carries the distant roar of a \nwaterfall, a sound both ominous and inviting in the stillness of the forest.🌲🌲\n");
 }
 

@@ -34,9 +34,9 @@ fn main() {
 
     let has_artifact = find_artifact(false);
     if has_artifact {
-        println!("You have found the ancient artifact!");
+        println!("You have found the Ancient Artifact!");
     } else {
-        println!("The ancient artifact remains elusive.");
+        println!("The Ancient Artifact remains elusive.");
     }
 
     let next_step = decide_next_step("a narrow, mysterious path leading deeper into the forest");
@@ -81,7 +81,7 @@ fn decide_next_step(path: &str) -> String {
 }
 
 fn continue_journey() -> String {
-    "\nYour journey continues into the dark forest. \n🌲The ancient artifact🌲still somewhere🌲out there🌲, waiting to be discovered. \n".to_string()
+    "\nYour journey continues into the dark forest. \n🌲The Ancient Artifact🌲still somewhere🌲out there🌲, waiting to be discovered. \n".to_string()
 }
 
 ```
