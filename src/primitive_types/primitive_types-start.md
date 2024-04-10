@@ -50,7 +50,7 @@ fn main() {
 
     println!("Double-checking, the artifact indeed lies at latitude {} and longitude {}.", artifact_location.0, artifact_location.1);
 
-    println!("\n🌲🌲🌲Your journey continues into the dark forest.🌲🌲🌲\nThe shadows between the trees whispering of greater adventures ahead.");
+    println!("\n🌲🌲🌲Your journey continues into the dark forest.🌲🌲🌲\nAbove, a break in the trees reveals a sky full of stars, lighting your way with \ncelestial clarity.");
 }
 
 ```
