@@ -55,13 +55,4 @@ fn main() {
 
     println!("\nYour journey continues into the dark forest.🌲🌲\nThe ground beneath your feet is a patchwork of shadows and decaying leaves, \nthe air chilled and heavy with the scent of moss and something unnameable.🍃");
 }
-
 ```
-
-
-
-
-
-
-
-The ground beneath your feet is a patchwork of shadows and decaying leaves, the air chilled and heavy with the scent of moss and something unnameable.

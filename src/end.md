@@ -47,7 +47,7 @@ After 110 challenges, you finally get the Ancient Artifact. After opening the tr
     padding: 5px 10px;
     cursor: pointer;
     transition: background-color 0.3s;
-	font-size: 16px;
+ font-size: 16px;
 }
 
 .simple-button:hover {
@@ -126,7 +126,6 @@ After 110 challenges, you finally get the Ancient Artifact. After opening the tr
 
 <style>
 
-
 .accordion-content {
     display: none;
     padding: 20px;
@@ -178,21 +177,30 @@ document.querySelectorAll('.accordion-button').forEach(button => {
         border-radius: 20px;
     }
 
-    .iframe-overlay {
+    .iframe-overlay-quarter-t {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
-        background: transparent; /* 透明覆盖层 */
-        z-index: 10; /* 确保覆盖在iframe之上 */
-    }
+        height: 40%;
+        /* 只覆盖iframe的1/4高度 */
+        background-color: rgba(0, 0, 0, 0.05);
+        /* 灰度背景 */
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        z-index: 15;
+        /* 高于iframe内容的层级 */
+}
 </style>
+
 <div class="iframe-wrapper">
     <iframe src="https://lzzs.fun/" frameborder="0" allowfullscreen></iframe>
-    <a href="https://lzzs.fun" target="_blank" class="iframe-overlay"></a> <!-- 覆盖层链接 -->
+    <div class="iframe-overlay-quarter-t">
+        <a href="https://lzzs.fun" target="_blank">点击此处打开</a>
+    </div> <!-- 新的遮罩层放在iframe底部1/4区域 -->
 </div>
 
-
 </div>
-
