@@ -761,24 +761,29 @@ ul#searchresults span.teaser em {
 .current-content-toc {
     position: fixed;
     right: 0;
-    /* Align to the right side */
-    top: 100px;
-    bottom: 0;
-    width: var(--current-content-toc-width, 190px);
-    /* Set a default width or use a CSS variable */
+    /* 向右对齐 */
+    top: 45px;
+    /* 顶部偏移 */
+    width: var(--current-content-toc-width, 220px);
+    /* 默认宽度或使用CSS变量 */
+    max-height: 100vh;
+    /* 设置最大高度为视口的100% */
     overflow-y: auto;
-    z-index: 0;
-    padding: 0px;
+    /* 内容超出时显示滚动条 */
+    z-index: 1000;
+    /* 确保它在页面其他内容之上 */
     box-sizing: border-box;
     font-size: 0.875em;
-    padding-right: 20px;
+    padding-right: 18px;
 }
 
+
 .content-area {
-    margin-right: 185px;
+    margin-right: 210px;
     /* 右边距设置为目录的宽度，保持内容区域居中 */
     padding-left: 15px;
     padding-right: 15px;
+
 }
 
 .content-area-inside {
@@ -802,6 +807,7 @@ ul#searchresults span.teaser em {
 /* You might want to add styles for list items, links, and active states */
 .current-content-toc li {
     margin-bottom: 0.25em;
+
 }
 
 .current-content-toc li a {
@@ -820,6 +826,10 @@ ul#searchresults span.teaser em {
 
 .current-content-toc ul {
     list-style-type: none;
+    max-height: 93vh;
+    /* 设置最大高度为视口的100% */
+    overflow-y: auto;
+    /* 内容超出时显示滚动条 */
     /* 去掉前面的圆点 */
 }
 

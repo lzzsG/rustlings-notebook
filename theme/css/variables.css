@@ -5,7 +5,7 @@
     --sidebar-resize-indicator-width: 7px;
     --sidebar-resize-indicator-space: 0px;
     --page-padding: 0px;
-    --content-max-width: 930px;
+    --content-max-width: 1000px;
     --menu-bar-height: 50px;
     --mono-font: "Source Code Pro", Consolas, "Ubuntu Mono", Menlo, "DejaVu Sans Mono", monospace, monospace;
     --code-font-size: 0.85em;
@@ -14,7 +14,7 @@
 
 @media (min-width: 1280px) {
     :root {
-        --content-max-width: 1000px;
+        --content-max-width: 1024px;
         /* 在大屏幕上使用更大的固定像素值 */
     }
 }

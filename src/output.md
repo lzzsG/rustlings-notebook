@@ -79,3 +79,5 @@
 > <span style="color: red;">注意！</span>解答或补充内容可能涉及后续题目内容和答案，酌情选择阅读。
 
 > <span style="color: red;">注意！</span>playground 环境不同于 rustlings 一些题目的运行会达不到测试效果
+
+> <span style="color: red;">注意！</span>chatGPT 可能产生幻觉，请考虑核实重要信息。本系列内容仅供参考理解使用，更加具体的学习请参考权威资料。（要不跑跑试试？）

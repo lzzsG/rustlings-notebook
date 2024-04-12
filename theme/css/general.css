@@ -19,7 +19,7 @@
 @media (min-width: 1280px) {
     :root {
         /* 当屏幕宽度大于 900px 时 */
-        font-size: 70%;
+        font-size: 68%;
         /* 使 1rem = 11.2px */
     }
 }

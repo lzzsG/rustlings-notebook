@@ -176,7 +176,7 @@ document.querySelectorAll('.accordion-button').forEach(button => {
         border: 3px solid #333;
         border-radius: 20px;
     }
-
+    
     .iframe-overlay-quarter-t {
         position: absolute;
         top: 0;
@@ -204,3 +204,23 @@ document.querySelectorAll('.accordion-button').forEach(button => {
 </div>
 
 </div>
+
+---
+
+# 更新记录
+
+
+
+
+
+
+
+【4/12】
+
+【4/11】 add 49-58 and components
+
+【4/10】 add 23-48
+
+【4/09】 add 1-22 and story
+
+【2024/3/23】 完成框架
