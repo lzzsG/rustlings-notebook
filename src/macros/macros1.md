@@ -425,3 +425,78 @@ fn main() {
 在这个例子中，`Point` 结构体通过`#[derive(Describe)]`自动获得了`Description` trait的实现。当我们创建`Point`的实例并调用`describe`方法时，它将输出预定义的字符串，表明这是一个`Point`的实例。
 
 派生宏为Rust开发者提供了极大的便利，特别是在需要为多种类型提供统一行为时。通过使用派生宏，可以显著减少重复的代码量，同时增强代码的一致性和可维护性。
+
+### 3. 函数宏（Function-like macros）
+
+函数宏（Function-like macros）类似于函数调用，它们可以在被调用的位置插入生成的代码。这种类型的过程宏不仅允许我们生成简单的代码，还可以处理复杂的输入和产生高度定制的输出。接下来，我将展示一个复杂的函数宏示例，它处理输入参数并根据这些参数生成 Rust 代码。
+
+#### 示例：创建一个条件日志宏
+
+我们将创建一个名为 `conditional_log!` 的函数宏，该宏接受一个日志等级和消息，根据当前的日志等级设置（模拟）来决定是否输出消息。这个宏将展示如何使用条件语句和变量处理来生成代码。
+
+```rust
+extern crate proc_macro;
+use proc_macro::TokenStream;
+use quote::quote;
+use syn::parse_macro_input;
+use syn::parse::{Parse, ParseStream};
+use syn::{LitStr, Token};
+
+// 自定义输入解析结构
+struct LogInput {
+    level: LitStr,
+    message: LitStr,
+}
+
+impl Parse for LogInput {
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        let level: LitStr = input.parse()?;
+        input.parse::<Token![,]>()?; // 解析并消耗逗号
+        let message: LitStr = input.parse()?;
+        Ok(LogInput { level, message })
+    }
+}
+
+#[proc_macro]
+pub fn conditional_log(input: TokenStream) -> TokenStream {
+    let LogInput { level, message } = parse_macro_input!(input as LogInput);
+
+    // 模拟的日志等级环境变量（在实际应用中，这里可以是环境变量或配置文件中的设置）
+    let log_level_env = "INFO"; // 只有INFO级别及以上的日志会被打印
+
+    // 根据日志等级生成不同的代码
+    let expanded = match level.value().as_str() {
+        "ERROR" | "WARN" | "INFO" => quote! {
+            if #level == #log_level_env || #level == "ERROR" || #level == "WARN" {
+                println!("[{}] {}", #level, #message);
+            }
+        },
+        _ => quote! {
+            if #level == #log_level_env {
+                println!("[{}] {}", #level, #message);
+            }
+        },
+    };
+
+    TokenStream::from(expanded)
+}
+
+```
+
+#### 使用宏
+
+```rust
+// 在 Rust 代码中使用此宏
+fn main() {
+    conditional_log!("INFO", "This is an information message.");
+    conditional_log!("DEBUG", "This debug message will not be printed.");
+}
+```
+
+#### 宏功能说明
+
+这个宏定义中，我们首先定义了一个解析结构 `LogInput`，用来解析和存储宏输入参数。它使用 `syn` 库的解析功能来处理输入的日志等级和消息文本。
+
+在宏本身中，我们根据传入的日志等级和一个模拟的环境变量 `log_level_env` 来决定是否输出日志。这里的条件编译确保只有当日志等级匹配时才输出消息。
+
+这个函数宏展示了如何在宏中使用条件逻辑和文本处理，以及如何处理稍微复杂的输入。这种宏在实际应用中非常有用，特别是在需要根据不同条件动态生成代码的场景中。

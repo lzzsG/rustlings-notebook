@@ -27,13 +27,11 @@ use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 
 fn main() {
-    // 线程的基础和同步
     let handles = (1..=3).map(|i| {
         thread::spawn(move || {
-            // 模拟解开一个复杂的魔法结界
             println!("Elf {} is solving puzzle {}", i, i);
             thread::sleep(std::time::Duration::from_millis(100 * i as u64));
-            i * 2  // 每个结界解开后的能量值
+            i * 2 
         })
     }).collect::<Vec<_>>();
 
@@ -41,7 +39,6 @@ fn main() {
         println!("Puzzle solved with energy: {}", handle.join().unwrap());
     }
 
-    // 共享状态的线程安全访问
     let counter = Arc::new(Mutex::new(0));
     let mut handles = vec![];
 
@@ -60,7 +57,6 @@ fn main() {
 
     println!("Total count of solved puzzles: {}", *counter.lock().unwrap());
 
-    // 多生产者单消费者模式
     let (tx, rx) = mpsc::channel();
     let mut handles = vec![];
 
@@ -77,12 +73,12 @@ fn main() {
         handle.join().unwrap();
     }
 
-    drop(tx);  // Dropping the sender to close the channel
+    drop(tx); 
 
     while let Ok(value) = rx.recv() {
         println!("Energy received: {}", value);
     }
 
-    println!("\nYour journey continues into🌲🌲the dark forest.🌲🌲");
+    println!("\nYour journey continues into🌲🌲the dark forest.🌲🌲\nStarlight filters through the tree canopy, promising guidance and protection on\nyour path ahead.");
 }
 ```
