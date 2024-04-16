@@ -215,7 +215,7 @@ document.querySelectorAll('.accordion-button').forEach(button => {
 
 
 
-【4/12】
+【4/12】 add 59-71 and history
 
 【4/11】 add 49-58 and components
 
