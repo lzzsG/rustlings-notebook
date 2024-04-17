@@ -19,9 +19,7 @@
 - [**Rust 版本指南（The Rust Edition Guide）**](https://doc.rust-lang.org/edition-guide/) - 介绍 Rust 语言的版本更新和迁移策略。
 - [**Exercism**](https://exercism.io/tracks/rust) - 提供互动学习平台，完成练习并获得社区导师反馈。
 - [**Rust Cookbook**](https://rust-lang-nursery.github.io/rust-cookbook/) - 使用 Rust 标准库解决编程任务。
-- [**Rust 宏小册（The Little Book of Rust Macros）**](https://danielkeep.github.io/tlborm/book/) - 介绍 Rust 宏编程
-
-的深入指南。
+- [**Rust 宏小册（The Little Book of Rust Macros）**](https://danielkeep.github.io/tlborm/book/) - 介绍 Rust 宏编程的深入指南。
 - [**Rust 和 WebAssembly**](https://rustwasm.github.io/docs/book/) - 详细讲解将 Rust 代码与 WebAssembly 结合使用。
 - [**嵌入式 Rust 之书（The Embedded Rust Book）**](https://docs.rust-embedded.org/book/) - 介绍在无操作系统环境下使用 Rust 的技术和策略。
 
@@ -30,4 +28,4 @@
 - Playground 环境与 rustlings 运行可能不同，某些题目效果可能有出入。
 - ChatGPT 可能产生误导，重要信息请核实。内容仅供参考，具体学习请参考权威资料。
 
-感谢您选择 Rustlings Notebook 来加深对 Rust 的理解！我们期待您的反馈和建议，共同进步。
+感谢您选择 Rustlings Notebook 来帮助学习 Rust ！我们期待您的反馈和建议，共同进步。
