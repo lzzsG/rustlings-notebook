@@ -50,7 +50,7 @@
 ---
 
 ```rust
-// 你不必现在理解以下代码。
+// 你不必现在理解以下代码，它也运行不起来。
 
 macro_rules! cast_spell {
     ($spell:expr) => {
