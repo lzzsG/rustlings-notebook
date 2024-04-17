@@ -1,80 +1,31 @@
-此仓库包含使用 mdBook 框架创建的书籍项目，演示了如何自动部署书籍到 GitHub Pages。
+# Rustlings Notebook
 
-## 项目概览
+欢迎来到 Rustlings 系列笔记！本系列旨在通过一系列练习帮助您熟悉 Rust 语言，涵盖从基本的变量、函数、控制结构到更高级的概念如泛型、特征和生命周期管理。您将深入了解模块、向量、字符串处理、错误处理、智能指针、多线程处理、宏等高级主题，旨在全面提升您的系统编程能力。
 
-本项目利用 mdBook，一个用于从 Markdown 文件创建现代在线书籍的工具。我们的目标是自动化构建和部署流程，以便每次更新内容时都能快速发布到 GitHub Pages 上。
+本笔记基于 Rustlings 的扩展110题版本整理而成，特别包括了 Rust 独有的所有权和借用规则、模式匹配以及不可变性的严格处理。实践练习如使用 unsafe 关键字操作裸指针、环境变量的应用、条件编译以及与其他语言的接口（FFI），都将帮助您学习如何在 Rust 中进行复杂和安全的系统级编程。此外，系列还补充了一系列算法练习，涉及基本数据结构操作到复杂算法实现，旨在提升解决实际问题的能力。
 
-## 如何使用
+## 注意事项
+- **本系列由 ChatGPT 提供的回答整理而成**。虽然我们力求准确和实用，但答案可能不够完备或精确。学习过程中需结合其他权威学习资源和官方文档。
+- **独立思考和实践至关重要**。我们强烈建议不直接抄袭答案，以便深入理解 Rust 的核心概念和实践应用。
+- **反馈和建议**：如在使用本笔记中遇到问题或有改进建议，请通过 GitHub issue 区域提出。我们非常欢迎您的反馈和建议，这将帮助我们改进内容，提升学习体验。
 
-要在本地构建和预览书籍，请确保已安装 [Rust](https://www.rust-lang.org/) 和 mdBook。然后，克隆此仓库并运行以下命令：
+## 推荐学习资源
+- [**Rust 程序设计语言（The Rust Programming Language）**](https://doc.rust-lang.org/book/) - 官方书籍，详细介绍 Rust 的基础和高级特性。
+- [**通过例子学 Rust（Rust by Example）**](https://doc.rust-lang.org/rust-by-example/) - 提供大量代码示例，适合快速理解 Rust 的具体应用。
+- [**Rust 标准库文档（Rust std）**](https://doc.rust-lang.org/std/) - 深入解析 Rust 标准库中的函数和模块。
+- [**Rust 圣经**](https://course.rs/) - 全面的中文 Rust 学习资源，覆盖从入门到高级内容。
+- [**Rust死灵书（The Rustonomicon）**](https://doc.rust-lang.org/nomicon/) - 探讨 Rust 中使用不安全代码的高级主题。
+- [**Rust 参考手册（The Rust Reference）**](https://doc.rust-lang.org/reference/) - 提供 Rust 语言的详细规范描述。
+- [**Rust 版本指南（The Rust Edition Guide）**](https://doc.rust-lang.org/edition-guide/) - 介绍 Rust 语言的版本更新和迁移策略。
+- [**Exercism**](https://exercism.io/tracks/rust) - 提供互动学习平台，完成练习并获得社区导师反馈。
+- [**Rust Cookbook**](https://rust-lang-nursery.github.io/rust-cookbook/) - 使用 Rust 标准库解决编程任务。
+- [**Rust 宏小册（The Little Book of Rust Macros）**](https://danielkeep.github.io/tlborm/book/) - 介绍 Rust 宏编程的深入指南。
+- [**Rust 和 WebAssembly**](https://rustwasm.github.io/docs/book/) - 详细讲解将 Rust 代码与 WebAssembly 结合使用。
+- [**嵌入式 Rust 之书（The Embedded Rust Book）**](https://docs.rust-embedded.org/book/) - 介绍在无操作系统环境下使用 Rust 的技术和策略。
 
-```
-clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
-mdbook serve
-```
+## 其他注意事项
+- 解答内容可能涉及后续题目内容和答案，酌情选择学习。
+- Playground 环境与 rustlings 运行可能不同，某些题目效果可能有出入。
+- ChatGPT 可能产生误导，重要信息请核实。内容仅供参考，具体学习请参考权威资料。
 
-打开浏览器访问 `http://localhost:3000` 查看书籍。
-
-## 自动部署流程
-
-通过 GitHub Actions 实现了 CI/CD 流程，自动将书籍部署到 GitHub Pages。以下是部署流程的概述：
-
-1. **推送更改**：将更改推送到 `main` 分支。
-2. **GitHub Actions 触发**：基于 `.github/workflows/deploy.yml` 中定义的工作流程，GitHub Actions 会自动触发构建过程。
-3. **构建书籍**：GitHub Actions 会安装 mdBook，然后构建书籍内容。
-4. **部署到 GitHub Pages**：构建完成后，书籍会自动部署到 GitHub Pages。
-
-你可以在 GitHub 仓库的 "Actions" 选项卡下查看工作流程的执行情况。
-
-## 关于 mdBook
-
-mdBook 是一个用 Rust 编写的命令行工具和库，用于从 Markdown 文件创建在线书籍。它灵感来源于 GitBook，并且专为编写技术文档和教程而设计。mdBook 生成的书籍具有清晰的结构、美观的界面，并且支持多种格式的输出，包括静态网站和 PDF 文件。
-
-mdBook 提供了多种功能，如：
-
-- **支持 Markdown**：使用 Markdown 编写内容，简单易用。
-- **多语言支持**：可以轻松地创建多语言书籍。
-- **可配置**：通过 `book.toml` 配置文件，你可以定制书籍的各个方面，如主题、插件和输出格式。
-- **测试代码片段**：可以测试书籍中的代码片段，确保代码的准确性。
-- **搜索功能**：生成的书籍带有内置的搜索功能，方便读者查找信息。
-
-mdBook 非常适合创建如编程语言文档、软件使用手册和教程等技术文档。它的使用范围从个人项目到大型企业都非常广泛。
-
-### 学习资源
-
-要了解更多关于 mdBook 的信息，包括如何安装、使用和配置 mdBook，你可以访问以下资源：
-
-- **GitHub 仓库**：https://github.com/rust-lang/mdBook
-- **官方文档**：https://rust-lang.github.io/mdBook/
-
-这些资源提供了丰富的指南和示例，帮助你开始使用 mdBook 来创建和发布你自己的在线书籍。
-
-## 项目定制
-
-本项目对 mdBook 进行了以下定制：
-
-#### Black 主题
-
-位于`theme\css\variables.css:62`
-
-#### 自定义导航
-
-位于`theme\index.hbs:180`
-
-#### 修改CSS 效果
-
-位于`theme\css\chrome.css`
-
-如果你不需要这些定制，可以简单地通过以下操作进行调整或删除：
-
-- **删除主题**：将 `theme` 文件夹从你的项目中删除，mdBook 将回退到默认主题。
-- **修改主题和效果**：在 `theme` 文件夹中更改 CSS 和 hbs文件，你可以调整导航样式和其他视觉效果以满足你的需求。
-
-## mdBook 目录生成工具
-
-在本项目中还开发了一个小工具，用于从文件夹结构的一系列 Markdown 文件自动生成 `SUMMARY.md` 目录。简化从已有md文件生成书籍项目和目录结构的工作。
-
-该工具的使用方法和源代码可以在下面的链接找到：
-
-- [mdBook-tools GitHub 仓库](https://github.com/lzzsG/mdBook-generate-directory)
+感谢您选择 Rustlings Notebook 来帮助学习 Rust ！我们期待您的反馈和建议，共同进步。
