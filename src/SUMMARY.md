@@ -1,6 +1,6 @@
-[110顺序目录](output.md)
+[开始](output.md)
 
-- [start](intro/start.md)
+- [110题顺序目录](intro/start.md)
   - [intro2](intro/intro2.md)
 - [variables](variables/variables-start.md)
   - [variables1](variables/variables1.md)
