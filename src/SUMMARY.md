@@ -139,8 +139,4 @@
   - [algorithm8](algorithm/algorithm8.md)
   - [algorithm9](algorithm/algorithm9.md)
   - [algorithm10](algorithm/algorithm10.md)
-- [final](final/final.md)
-  - [111](final/final+last.md)
-  
-
-[end](end.md)
+- [The Final Challenge](final/final.md)

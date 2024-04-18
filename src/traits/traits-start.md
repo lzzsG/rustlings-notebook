@@ -31,42 +31,35 @@
 ```rust
 // 你不必现在理解以下代码，不过你可以尝试运行它。
 
-// 定义一个特质 `ToolBehavior`，它包含一个方法 `use_tool`
 trait ToolBehavior {
     fn use_tool(&self) -> String;
 
-    // 特质的默认实现
     fn tool_size(&self) -> String {
         String::from("standard size")
     }
 }
 
-// 定义一个 `MagicTool` 结构体
 struct MagicTool {
     name: String,
     power: u32,
 }
 
-// 为 `MagicTool` 实现 `ToolBehavior` 特质
 impl ToolBehavior for MagicTool {
     fn use_tool(&self) -> String {
         format!("Using {} with power {}", self.name, self.power)
     }
 }
 
-// 定义另一个特质 `Inspect`，用于检查工具
 trait Inspect {
     fn inspect(&self) -> String;
 }
 
-// 同时为 `MagicTool` 实现 `Inspect` 特质
 impl Inspect for MagicTool {
     fn inspect(&self) -> String {
         format!("{} is a magical tool with {} power.", self.name, self.power)
     }
 }
 
-// 定义一个函数，它接受实现了 `ToolBehavior` 和 `Inspect` 的任何类型
 fn perform_task<T: ToolBehavior + Inspect>(tool: &T) {
     println!("{}", tool.use_tool());
     println!("{}", tool.inspect());
@@ -78,7 +71,6 @@ fn main() {
         name: String::from("Magic Hammer"),
         power: 5,
     };
-
     perform_task(&magic_hammer);
 
     println!("\nYour journey continues into the dark forest.🌲🌲");

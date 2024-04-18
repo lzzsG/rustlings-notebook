@@ -25,7 +25,7 @@
 
 mod magic {
     pub fn ancient_spell() {
-        println!("Prepare to cast an ancient spell...\n\"Ha ze ro ri a ru\"\n\"Ha ji ke ro si na pu su\"\n\"Banishiment this world!\"");
+        println!("Prepare to cast an ancient space-time transformation spell...\n\"Ha ze ro ri a ru\"\n\"Ha ji ke ro si na pu su\"\n\"Banishiment this world!\"");
     }
 
     pub mod special {
