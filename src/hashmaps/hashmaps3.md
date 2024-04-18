@@ -110,19 +110,27 @@ mod tests {
 
 ---
 
-### 本题内容：
+### 本题内容
 
-这个`hashmaps3`练习要求我们根据一系列足球比赛的结果，构建一个记录球队进球数和失球数的分数表。为了完成这个练习，你需要遍历每一行比赛结果，并更新`HashMap`中每个球队的进球数和失球数。
+本练习的目标是使用 `HashMap` 来构建一个足球比赛的得分表。你需要处理一系列的比赛结果，每个结果包括两个队伍的名字和各自的进球数。这个练习将帮助学生了解如何在 Rust 中使用 `HashMap` 来存储和更新键值对数据，同时也涉及对数据结构的查询和更新。
 
-### 解题思路：
+### 相关知识点
 
-1. **解析比赛结果**：首先，你需要遍历每一行比赛结果，并使用`split(',')`方法将每行分解为球队名称和比分。
+1. **`HashMap` 使用**：了解如何创建和使用 `HashMap`，包括插入、更新和查询操作。
+2. **结构体**：通过定义 `Team` 结构体来组织数据，每个队伍的进球数和失球数作为结构体的字段。
+3. **字符串处理**：从字符串中解析数据，涉及字符串分割和类型转换。
 
-2. **更新分数表**：对于每一行的比赛结果，你需要更新两支球队的进球数和失球数。这里，你可以使用`HashMap`的`entry().or_insert()`方法来处理每支球队的记录。如果球队之前没有记录，则插入一个新的`Team`实例；如果已经有记录，则更新该记录。
+### 解题方法
 
-3. **更新进球和失球数据**：在已经有球队记录的情况下，需要根据比赛结果更新球队的进球数（`goals_scored`）和失球数（`goals_conceded`）。这可以通过解构`entry()`方法返回的`Entry`枚举来完成。
+#### 步骤描述：
 
-### 代码实现：
+1. **解析输入数据**：使用 `split` 方法分割每一行的数据以获取队伍名称和得分。
+2. **更新 `HashMap`**：对每一场比赛的两个队伍，检查 `HashMap` 中是否已存在相关记录，若不存在则插入，若存在则更新。
+3. **记录进球和失球**：对于每个队伍，更新它的进球数和失球数。进球数直接从分割得到的数据中读取，失球数则是对方的进球数。
+
+#### 代码示例：
+
+这里是完善的 `build_scores_table` 函数的代码示例：
 
 ```rust
 use std::collections::HashMap;
@@ -142,30 +150,32 @@ fn build_scores_table(results: String) -> HashMap<String, Team> {
         let team_2_name = v[1].to_string();
         let team_2_score: u8 = v[3].parse().unwrap();
 
-        scores.entry(team_1_name.clone()).or_insert(Team { goals_scored: 0, goals_conceded: 0 })
-            .and_modify(|e| {
-                e.goals_scored += team_1_score;
-                e.goals_conceded += team_2_score;
-            });
-        
-        scores.entry(team_2_name.clone()).or_insert(Team { goals_scored: 0, goals_conceded: 0 })
-            .and_modify(|e| {
-                e.goals_scored += team_2_score;
-                e.goals_conceded += team_1_score;
-            });
+        // Update team 1
+        let team_1 = scores.entry(team_1_name).or_insert(Team {
+            goals_scored: 0,
+            goals_conceded: 0,
+        });
+        team_1.goals_scored += team_1_score;
+        team_1.goals_conceded += team_2_score;
+
+        // Update team 2
+        let team_2 = scores.entry(team_2_name).or_insert(Team {
+            goals_scored: 0,
+            goals_conceded: 0,
+        });
+        team_2.goals_scored += team_2_score;
+        team_2.goals_conceded += team_1_score;
     }
     scores
 }
 ```
 
-在这段代码中，`or_insert`方法用于初始化球队的记录（如果它还不存在的话），而`and_modify`方法用于更新球队的进球数和失球数。这种方法可以确保每次处理比赛结果时，球队的统计数据都能被正确地更新。
+### 说明：
 
-### 测试部分解释：
+- **`entry().or_insert()`**：这个方法是用来处理 `HashMap` 中键值对的一种高效方式。如果键不存在，它会插入默认值；如果存在，则返回现有值的可变引用。
+- **累加数据**：对于每个队伍，我们通过累加其进球数和失球数来更新其统计数据。
 
-- `build_scores`测试验证是否正确地记录了所有参赛球队。
-- `validate_team_score_1`和`validate_team_score_2`测试检查特定球队的进球数和失球数是否符合预期。
-
-通过这个练习，你可以深入理解如何使用`HashMap`来管理和更新复杂的数据结构，以及如何根据需要动态地插入或更新数据。这在处理实际应用中的数据集时非常有用。
+通过这种方式，学生不仅能学习如何使用 `HashMap`，还能理解如何通过结构体来管理和更新复杂的数据结构。这对于处理实际应用中的各种数据统计和管理任务非常有帮助。
 
 ## 扩展知识点与解答：
 

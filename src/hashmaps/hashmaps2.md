@@ -159,7 +159,12 @@ fn fruit_basket(basket: &mut HashMap<Fruit, u32>) {
         basket.entry(fruit).or_insert(1);
     }
     // 确保总数超过11，可以对一种水果添加额外数量
-    *basket.entry(Fruit::Pineapple).or_insert(1) += (12 - basket.values().sum::<u32>());
+    let current_total: u32 = basket.values().sum();
+    if current_total < 12 {
+        // Calculate how many more fruits are needed to make the total 12.
+        let needed = 12 - current_total;
+        *basket.entry(Fruit::Pineapple).or_insert(1) += needed;
+    }
 }
 
 #[cfg(test)]

@@ -97,7 +97,7 @@ mod tests {
 
 ### 解题方法：
 
-#### 定义函数签名
+### 定义函数签名
 
 首先，需要定义`transformer`函数的签名。输入是元组的向量，元组包含`String`和`Command`。输出是`String`的向量。
 
@@ -105,7 +105,7 @@ mod tests {
 pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
 ```
 
-#### 完成输出声明
+### 完成输出声明
 
 输出是`String`的向量：
 
@@ -113,7 +113,7 @@ pub fn transformer(input: Vec<(String, Command)>) -> Vec<String> {
 let mut output: Vec<String> = vec![];
 ```
 
-#### 实现功能
+### 实现功能
 
 遍历输入向量，根据命令对字符串进行相应的处理，并将结果添加到输出向量中。
 
@@ -133,12 +133,40 @@ for (mut string, command) in input.iter() {
 }
 ```
 
-#### 导入模块
+在这段 Rust 代码中，我们处理一个元组的迭代器 `input`，每个元组包含一个字符串和一个 `Command` 枚举类型的命令。对于每个元组，根据 `Command` 枚举的值对字符串进行相应的操作，并将结果字符串推送到输出向量 `output` 中。下面是详细解释：
+
+**输入与命令枚举**
+
+- `input` 是一个包含元组的迭代器，其中每个元组由一个字符串和一个 `Command` 枚举值组成。
+- `Command` 是一个枚举，定义了可以应用于字符串的不同命令，如 `Uppercase`、`Trim` 和 `Append(n)`。
+
+**循环与匹配**
+
+- `for (mut string, command) in input.iter()` 这一行设置了一个循环，遍历 `input` 中的每个元组。`string` 是元组中的字符串，`command` 是应用于该字符串的命令。
+
+**匹配操作**
+
+- `match command` 结构用于根据 `command` 的值选择执行不同的操作。对于每种命令，我们如下操作：
+
+  1. **Uppercase**：
+     - 如果命令是 `Uppercase`，则调用 `string.to_uppercase()` 将字符串转换为大写，并将转换后的字符串推送到输出向量 `output` 中。
+
+  2. **Trim**：
+     - 如果命令是 `Trim`，则调用 `string.trim()` 去除字符串首尾的空白字符，并将结果转换为一个新的 `String` 对象，然后推送到 `output`。
+
+  3. **Append(n)**：
+     - 如果命令是 `Append(n)`，其中 `n` 是一个整数，表示需要重复追加的次数（例如，追加 "bar" 字符串 `n` 次到原始字符串后）。首先克隆原始字符串到 `new_string`，然后在一个循环中追加 "bar" `n` 次。完成后，将新的字符串推送到 `output`。
+
+**输出向量**
+
+- `output` 是一个向量，用于存储每次迭代修改后的字符串。
+
+### 导入模块
 
 在测试模块中，需要导入`transformer`函数。如果`transformer`函数位于`my_module`模块中，应这样导入：
 
 ```rust
-use my_module::transformer;
+use crate::my_module::transformer;
 ```
 
 完成以上步骤后，你的函数就应该能正确处理输入，并在测试中返回预期的输出了。这个练习综合了你之前学过的几个主题，是对你知识的一个全面测试。
