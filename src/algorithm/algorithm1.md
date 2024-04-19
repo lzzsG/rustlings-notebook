@@ -189,63 +189,470 @@ mod tests {
 
 ### 本题内容
 
-本练习的目标是实现合并两个有序的单链表成一个新的有序单链表。这是数据结构中常见的问题，它不仅检验你对单链表的理解，还涉及到合并过程中的指针操作和条件判断，这对于理解更复杂的数据结构和算法非常有帮助。
+本练习要求学生实现一个函数，用于合并两个已排序的单向链表。目标是创建一个新的链表，其中包含两个输入链表中所有元素的有序合并。这是数据结构中常见的一个问题，理解其解决方法对于掌握链表操作非常重要。
 
-### 相关知识点：
+### 相关知识点
 
-1. **单链表结构**：单链表是一种线性数据结构，其中的每个元素称为节点，每个节点包含数据和指向下一个节点的指针。
-2. **指针安全操作**：使用 `NonNull` 来确保指针非空，这在处理裸指针时提高了安全性。
-3. **链表遍历和修改**：通过遍历和修改链表来合并两个链表。
+1. **单向链表**：一种数据结构，其中的每个节点包含数据和指向链表中下一个节点的指针。这种结构允许有效地在序列的一端添加元素，但访问或搜索元素通常需要从头部开始遍历。
 
-### 解题方法：
+2. **链表节点的管理**：包括创建节点、管理节点的生命周期（在 Rust 中涉及所有权和生命周期管理），以及节点的连接和断开。
 
-1. **创建节点和链表结构**：首先定义节点 (`Node`) 和链表 (`LinkedList`) 的结构，包括基本的增加 (`add`) 和获取节点 (`get`) 方法。
-2. **实现合并函数**：`merge` 函数是本题的核心，需要合理使用两个链表的头部节点开始比较，根据大小顺序逐步构建新的链表。
-3. **安全考虑**：确保在访问和修改指针时遵循 Rust 的安全原则，特别是在裸指针操作中。
+3. **合并有序列表**：将两个已排序的列表合并成一个新的有序列表，这是排序算法和数据结构中的一个重要操作，常见于归并排序算法中。
 
-### 代码示例：
+4. **所有权和借用**：Rust 独特的所有权系统管理内存，确保安全地使用数据，特别是在复杂结构如链表的创建和修改中。
 
-这里给出 `merge` 函数的一个基本实现框架：
+### 解题方法
+
+#### 1. 迭代方法
+
+**迭代方法**的主要优点是空间效率高，因为它只需要常数级额外空间来存储几个指针。下面是实现的步骤：
+
+- 初始化两个指针，分别指向两个链表的头部。
+- 创建一个虚拟头节点，这将简化边界条件的处理。
+- 使用一个迭代指针从头开始遍历两个链表，每次迭代中比较两个链表当前节点的值。
+- 将较小值的节点连接到结果链表的当前节点，并移动较小值节点的指针到下一个。
+- 继续迭代直到一个链表为空。
+- 将非空链表的剩余部分链接到结果链表的末尾。
+- 返回虚拟头节点的下一个节点，即合并后的链表的头部。
+
+#### 2. 递归方法
+
+**递归方法**在概念上更简单，代码通常更短，但可能会因为深度递归而导致堆栈溢出。其实现方式如下：
+
+- 如果任一链表为空，返回另一链表。
+- 比较两个链表的头节点：
+  - 如果第一个链表的头节点值较小，则将这个节点的 `next` 设置为其余节点和第二个链表合并后的结果。
+  - 反之，如果第二个链表的头节点值较小，则操作类似，只是目标链表变为第二个。
+- 返回当前选择的头节点，这样递归调用会构建整个链表。
+
+### 示例实现：迭代方法
 
 ```rust
-pub fn merge(mut list_a: LinkedList<T>, mut list_b: LinkedList<T>) -> LinkedList<T>
-where
-    T: Ord,
-{
-    let mut result = LinkedList::new();
+impl<T: PartialOrd + Copy + Display> LinkedList<T> {
+    /// 将两个排序的链表合并为一个排序的链表。
+    pub fn merge(list_a: LinkedList<T>, list_b: LinkedList<T>) -> Self {
+        // 创建一个新的空链表作为合并后的结果
+        let mut result = Self::new();
+        
+        // 初始化两个变量来分别跟踪两个输入链表的当前节点
+        let mut node_a = list_a.start;
+        let mut node_b = list_b.start;
 
-    // 用两个可变引用遍历两个链表
-    let mut a_curr = list_a.start;
-    let mut b_curr = list_b.start;
-
-    while let (Some(a), Some(b)) = (a_curr, b_curr) {
-        // 比较当前节点的值决定添加哪个节点到结果链表
-        if unsafe { a.as_ref().val } <= unsafe { b.as_ref().val } {
-            // 添加 list_a 的当前节点到结果链表
-            result.add(unsafe { a.as_ref().val });
-            a_curr = unsafe { a.as_ref().next }; // 移动 list_a 的当前节点
-        } else {
-            // 添加 list_b 的当前节点到结果链表
-            result.add(unsafe { b.as_ref().val });
-            b_curr = unsafe { b.as_ref().next }; // 移动 list_b 的当前节点
+        // 继续迭代，直到其中一个链表完全遍历完毕
+        while let (Some(a), Some(b)) = (node_a, node_b) {
+            unsafe {
+                // 比较两个链表当前节点的值，并将较小的节点的值添加到结果链表中
+                if (*a.as_ptr()).val <= (*b.as_ptr()).val {
+                    result.add((*a.as_ptr()).val);
+                    // 移动到链表a的下一个节点
+                    node_a = (*a.as_ptr()).next;
+                } else {
+                    result.add((*b.as_ptr()).val);
+                    // 移动到链表b的下一个节点
+                    node_b = (*b.as_ptr()).next;
+                }
+            }
         }
-    }
 
-    // 如果一个链表遍历完，将另一个链表剩余部分全部添加到结果链表
-    while let Some(a) = a_curr {
-        result.add(unsafe { a.as_ref().val });
-        a_curr = unsafe { a.as_ref().next };
-    }
-    while let Some(b) = b_curr {
-        result.add(unsafe { b.as_ref().val });
-        b_curr = unsafe { b.as_ref().next };
-    }
+        // 一旦一个链表被完全遍历，将另一个链表的剩余部分添加到结果链表中
+        while let Some(a) = node_a {
+            unsafe {
+                result.add((*a.as_ptr()).val);
+                node_a = (*a.as_ptr()).next;
+            }
+        }
+        while let Some(b) = node_b {
+            unsafe {
+                result.add((*b.as_ptr()).val);
+                node_b = (*b.as_ptr()).next;
+            }
+        }
 
-    result
+        // 返回合并后的新链表
+        result
+    }
 }
 ```
 
-**注意**：上面的代码需要确保 `Node` 和 `LinkedList` 的方法和属性适用，并且安全地处理了裸指针。实际实现可能需要根据具体的节点和链表定义做调整。此外，还需要处理一些特殊情况，如链表为空等。
+### 代码解释
+
+1. **泛型约束** (`<T: PartialOrd + Copy + Display>`): 这确保了 `T` 类型的元素可以被比较（使用 `<` 或 `<=`）、复制（而不仅仅是移动，这对于不可变数据类型很重要），并且可以显示（例如在打印或日志中）。
+
+2. **创建结果链表**: 一个新的空 `LinkedList` 被创建，用于存储合并后的节点。
+
+3. **主循环** (`while let (Some(a), Some(b)) = (node_a, node_b)`): 这个循环持续进行，直到 `node_a` 或 `node_b` 其中之一为 `None`。在循环内部，使用 `unsafe` 块来解引用裸指针。这是必需的，因为 `NonNull` 本身并不保证所指向的内存是有效的，但它确保了不会是 `null`。
+
+4. **添加较小节点的值**: 根据节点的值进行比较，并添加较小的值到结果链表中，然后将相应链表的指针移动到下一个节点。
+
+5. **处理剩余的节点**: 两个 `while let` 循环处理未被完全遍历的链表，将剩余的节点依次添加到结果链表中。
+
+通过这种方式，`merge` 函数有效地将两个链表合并成一个有序链表，同时保证了在 Rust 中操作的安全性。这个实现不仅确保了代码的正确性，也考虑了效率和安全性，是处理此类问题的一个典型范例。
+
+### 示例实现：递归方法
+
+```rust
+impl<T: PartialOrd + Copy + Display> LinkedList<T> {
+    /// 将两个排序的链表合并为一个排序的链表。
+    pub fn merge(list_a: LinkedList<T>, list_b: LinkedList<T>) -> Self {
+        /// 递归合并两个链表节点。
+        fn merge_recursive<T: PartialOrd + Copy + Display>(node_a: Option<NonNull<Node<T>>>, node_b: Option<NonNull<Node<T>>>) -> Option<NonNull<Node<T>>> {
+            match (node_a, node_b) {
+                (None, _) => node_b,  // 如果链表a为空，返回当前链表b的节点。
+                (_, None) => node_a,  // 如果链表b为空，返回当前链表a的节点。
+                (Some(a), Some(b)) => unsafe {  // 如果两个链表都不为空，比较节点值。
+                    if (*a.as_ptr()).val <= (*b.as_ptr()).val {
+                        // 如果a节点的值小于等于b节点的值，设置a节点的next为递归合并后的结果。
+                        (*a.as_ptr()).next = merge_recursive((*a.as_ptr()).next, Some(b));
+                        Some(a)  // 返回节点a作为合并链表的当前节点。
+                    } else {
+                        // 如果b节点的值小于a节点的值，设置b节点的next为递归合并后的结果。
+                        (*b.as_ptr()).next = merge_recursive(Some(a), (*b.as_ptr()).next);
+                        Some(b)  // 返回节点b作为合并链表的当前节点。
+                    }
+                },
+            }
+        }
+
+        // 开始递归合并，并从返回的节点开始构建新链表。
+        let start = merge_recursive(list_a.start, list_b.start);
+        let mut merged_list = Self::new();  // 创建一个新的空链表作为合并后的结果。
+        merged_list.start = start;  // 设置新链表的起始节点。
+
+        // 可选：如果需要维护链表的长度和结束节点
+        // 此代码假设合并过程中节点没有被消耗，并统计剩余的节点数
+        let mut current = merged_list.start;
+        let mut end = None;
+        let mut length = 0;
+        while let Some(node) = current {
+            unsafe {
+                end = Some(node);  // 更新末尾节点。
+                current = (*node.as_ptr()).next;  // 移动到下一个节点。
+                length += 1;  // 链表长度加一。
+            }
+        }
+        merged_list.end = end;  // 设置新链表的结束节点。
+        merged_list.length = length;  // 设置新链表的长度。
+
+        merged_list  // 返回合并后的链表。
+    }
+}
+```
+
+### 代码解释
+
+1. **泛型约束**：`<T: PartialOrd + Copy + Display>` 确保元素类型 `T` 可以进行比较、复制和显示。这对于合并排序链表是必要的，因为需要比较元素以决定其顺序。
+
+2. **递归函数 `merge_recursive`**：这是一个私有函数，用于递归地合并两个链表的节点。递归的基本案例处理了一个或两个链表为空的情况。如果两个链表都非空，它将比较头节点的值，并递归地合并剩余部分。
+
+3. **构建结果链表**：在递归完成后，使用从 `merge_recursive` 返回的节点作为新链表的起始节点，然后通过遍历这些节点来构建完整的链表，并计算长度和更新结束节点。
+
+这种递归方法直观且易于理解，尤其适用于链表的操作，因为它自然地遵循链表的节点链接结构。不过，需要注意的是，递归可能会在处理非常长的链表时导致堆栈溢出。
+
+---
+
+以下是更多详细分析和解释，包括数据结构定义、辅助函数、和特定实现方法的解释。
+
+### 数据结构定义
+
+#### Node 结构体
+
+`Node` 是链表的基本组成单元，它包含存储在链表中的值（`val`）和指向链表中下一个节点的指针（`next`）。
+
+```rust
+#[derive(Debug)]
+struct Node<T> {
+    val: T,
+    next: Option<NonNull<Node<T>>>,
+}
+```
+
+- `val`: 存储节点的数据。
+- `next`: 是一个 `Option<NonNull<Node<T>>>` 类型，用于安全地指向链表中的下一个节点。`NonNull` 保证指针不为空，而 `Option` 允许这个指针在逻辑上可以是 `None`（比如在链表末尾）。
+
+#### LinkedList 结构体
+
+`LinkedList` 表示整个链表，包含链表的长度和指向链表头尾节点的指针。
+
+```rust
+#[derive(Debug)]
+struct LinkedList<T> {
+    length: u32,
+    start: Option<NonNull<Node<T>>>,
+    end: Option<NonNull<Node<T>>>,
+}
+```
+
+- `length`: 链表的长度，用于快速访问链表大小信息。
+- `start`: 指向链表的第一个节点。
+- `end`: 指向链表的最后一个节点。
+
+### 核心方法实现
+
+#### new 方法
+
+创建一个空的 `LinkedList`。
+
+```rust
+impl<T> LinkedList<T> {
+    pub fn new() -> Self {
+        Self {
+            length: 0,
+            start: None,
+            end: None,
+        }
+    }
+}
+```
+
+#### add 方法
+
+向链表的末尾添加一个新节点。
+
+```rust
+pub fn add(&mut self, obj: T) {
+    let mut node = Box::new(Node::new(obj));
+    node.next = None;
+    let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
+
+    match self.end {
+        None => self.start = node_ptr,
+        Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
+    }
+    self.end = node_ptr;
+    self.length += 1;
+}
+```
+
+- 创建一个新的 `Node` 实例并将其转化为裸指针。
+- 如果链表为空，将 `start` 和 `end` 都指向新节点。
+- 如果不为空，将当前末尾节点的 `next` 指向新节点，并更新 `end` 指针。
+
+#### get 方法
+
+获取链表中指定索引位置的元素。
+
+```rust
+pub fn get(&mut self, index: i32) -> Option<&T> {
+    self.get_ith_node(self.start, index)
+}
+```
+
+- 调用 `get_ith_node` 方法来递归地寻找指定索引的节点。
+
+#### get_ith_node 方法
+
+递归地获取链表中指定索引的节点。
+
+```rust
+fn get_ith_node(&mut self, node: Option<NonNull<Node<T>>>, index: i32) -> Option<&T> {
+    match node {
+        None => None,
+        Some(next_ptr) => match index {
+            0 => Some(unsafe { &(*next_ptr.as_ptr()).val }),
+            _ => self.get_ith_node(unsafe { (*next_ptr.as_ptr()).next }, index - 1),
+        },
+    }
+}
+```
+
+- 如果节点是 `None` 或索引为 0，直接返回节点的值。
+- 否则递归地在下一个节点查找。
+
+### 合并两个链表的方法
+
+#### merge 方法
+
+合并两个已排序的链表。
+
+```rust
+pub fn merge(list_a: LinkedList<T>, list_b: LinkedList<T>) -> Self {
+    // 实现细节
+}
+```
+
+- 逐一比较两个链表的头部，将较小的节点添加到新链表中。
+- 当一个链表为空时，将另一个链表的余部分直接链接到新链表的尾部。由于具体的合并逻辑未在你的原始代码中提供，这里我们只能大概描述这一过程。正确的合并操作需要遵循迭代或递归的逻辑，确保新链表保持有序。
+
+### 特殊方法实现
+
+#### Display Trait for LinkedList
+
+实现 `Display` 特征，使得链表可以被更人性化地打印出来，便于调试和展示链表内容。
+
+```rust
+impl<T> Display for LinkedList<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut current = self.start;
+        while let Some(node) = current {
+            unsafe {
+                write!(f, "{} -> ", (*node.as_ptr()).val)?;
+                current = (*node.as_ptr()).next;
+            }
+        }
+        write!(f, "None")
+    }
+}
+```
+
+这个实现使用 `Formatter` 来连续写入每个节点的值，并在每个节点后加上箭头 `->` 表示指向下一个节点。链表末尾写入 `"None"` 表明链表结束。
+
+#### Display Trait for Node
+
+类似地，也为节点实现 `Display` 特征，以便单独打印节点时能清楚地显示节点的值和其后继的状态。
+
+```rust
+impl<T> Display for Node<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self.next {
+            Some(next) => write!(f, "{}, next -> ", self.val),
+            None => write!(f, "{}, next -> None", self.val),
+        }
+    }
+}
+```
+
+此实现中，如果节点有后继节点，则显示该节点的值和指向下一个节点的文本，如果没有后继节点，则显示 `"None"` 表明这是链表的末尾。
+
+### 总结
+
+通过这种全面的方法，我们不仅定义了链表和节点的基本结构，还实现了添加新节点、获取特定节点、显示链表和节点以及合并两个链表的关键功能。这为处理更复杂的数据结构问题奠定了坚实的基础，并深入展示了 Rust 语言在管理安全、高效数据结构方面的强大功能。每个函数和方法的实现都考虑到了 Rust 的安全性要求，特别是在处理裸指针和可变借用时。
+
+---
+
+下面将详细讲解代码中涉及的每个部分，包括 Box 的使用、unsafe 代码块的安全考虑、以及 Rust 中的模式匹配（match）、`Display` 特征等。
+
+### Box 构建和节点管理
+
+#### Box 的使用
+
+```rust
+let mut node = Box::new(Node::new(obj));
+```
+
+在 Rust 中，`Box<T>` 是一种智能指针，用于在堆上分配空间。在这里，它被用来创建一个新的链表节点。使用 `Box` 是因为链表的节点需要在运行时动态管理，`Box` 提供了简单的方式来处理堆上的数据。
+
+#### 转换为裸指针
+
+```rust
+let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
+```
+
+- `Box::into_raw(node)` 将 `Box` 所有权转换为一个裸指针（raw pointer），这使得节点的所有权转移，避免了 Rust 默认的内存自动清理机制，允许我们手动管理内存。
+- `NonNull::new_unchecked` 是一个包装裸指针的安全包装器，它保证了指针不是空（non-null），这对性能优化有帮助，因为编译器可以假设指针总是有效的。
+
+### 添加节点到链表
+
+```rust
+match self.end {
+    None => self.start = node_ptr,
+    Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
+}
+self.end = node_ptr;
+self.length += 1;
+```
+
+- 使用 `match` 语句来处理链表的尾节点是否存在。如果链表为空（`self.end` 是 `None`），则新节点成为链表的起始和结束节点。否则，将新节点链接到原来的尾节点后面。
+- `unsafe { (*end_ptr.as_ptr()).next = node_ptr }` 在这里需要使用 `unsafe` 代码块，因为 `.as_ptr()` 返回一个裸指针，需要手动保证访问安全。这里的操作是将新节点设置为当前尾节点的 `next` 节点。
+
+### 获取节点
+
+```rust
+pub fn get(&mut self, index: i32) -> Option<&T> {
+    self.get_ith_node(self.start, index)
+}
+```
+
+这个函数是链表获取元素的接口，它调用 `get_ith_node` 以递归方式查找特定索引的节点。
+
+### 递归查找节点
+
+```rust
+fn get_ith_node(&mut self, node: Option<NonNull<Node<T>>>, index: i32) -> Option<&T> {
+    match node {
+        None => None,
+        Some(next_ptr) => match index {
+            0 => Some(unsafe { &(*next_ptr.as_ptr()).val }),
+            _ => self.get_ith_node(unsafe { (*next_ptr.as_ptr()).next }, index - 1),
+        },
+    }
+}
+```
+
+- 第一个 `match` 处理当前节点是否存在，如果不存在（即链表结尾），则返回 `None`。
+- 第二个 `match` 判断是否达到了所需的索引，如果 `index` 为 0，说明已找到目标节点，返回其值的引用。
+- 如果不是目标索引，则递归调用 `get_ith_node`，索引减一，直到索引为 0。
+
+### 实现 Display 特征为 LinkedList
+
+```rust
+impl<T> Display for LinkedList<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut current = self.start;
+        while let Some(node) = current {
+            unsafe {
+                write!(f, "{} -> ", (*node.as_ptr()).val)?;
+                current = (*node.as_ptr()).next;
+            }
+        }
+        write!(f, "None")
+    }
+}
+```
+
+#### 解释：
+
+- `impl<T> Display for LinkedList<T>`：这里定义了一个泛型实现，要求泛型 `T` 必须实现 `Display` 特征，这使得链表中的元素可以被打印。
+
+- `fn fmt(&self, f: &mut Formatter) -> fmt::Result`：这是 `Display` 特征必须实现的函数，它用于将数据格式化到提供的格式化器 `f`。
+
+- `let mut current = self.start;`：初始化一个变量 `current` 来遍历链表，从头节点开始。
+
+- `while let Some(node) = current`：这是一个 `while let` 循环，只要 `current` 是 `Some(node)`，循环就会继续。这允许我们遍历整个链表。
+
+- `unsafe { write!(f, "{} -> ", (*node.as_ptr()).val)?; }`：在 `unsafe` 代码块中，我们使用 `node.as_ptr()` 获取节点的裸指针，并通过解引用打印节点值。由于这里涉及裸指针，必须确保这些操作的安全性。
+
+- `current = (*node.as_ptr()).next;`：更新 `current` 为下一个节点，继续遍历。
+
+- `write!(f, "None")`：在链表末尾输出 "None"，表示链表已结束。
+
+### 实现 Display 特征为 Node
+
+```rust
+impl<T> Display for Node<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self.next {
+            Some(next) => write!(f, "{}, next -> ", self.val),
+            None => write!(f, "{}, next -> None", self.val),
+        }
+    }
+}
+```
+
+#### 解释：
+
+- 这里为节点 `Node` 实现 `Display` 特征，同样要求 `T` 实现 `Display`。
+
+- `fn fmt(&self, f: &mut Formatter) -> fmt::Result`：同样是必需实现的格式化函数。
+
+- `match self.next`：通过 `match` 语句检查节点的 `next` 指针是否为空，这决定了如何打印节点的后续部分。
+
+- `Some(next) => write!(f, "{}, next -> ", self.val)`：如果 `next` 不为空，打印当前节点的值后跟 "next ->"。
+
+- `None => write!(f, "{}, next -> None", self.val)`：如果 `next` 为空，打印当前节点的值后跟 "next -> None"，表示这是链表的末尾节点。
+
+---
 
 ### 扩展知识点：
 
@@ -284,76 +691,6 @@ where
 4. **单元测试**：
    - 编写多个单元测试来验证各种情况，如两个空链表的合并、一个空链表和一个非空链表的合并、两个具有相同元素的链表的合并等。
    - 使用边界值测试和随机化测试来确保代码的健壮性和正确性。
-
-通过扩展这些知识点和解题方法，学生不仅能解决当前的链表合并问题，还能深入理解 Rust 中的高级编程技巧和内存管理，为处理更复杂的数据结构和算法问题打下坚实的基础。
-
-## 关于链表
-
-Rust 的标准库提供了一些基本的链表结构，如 `std::collections::LinkedList`，但它通常不如自定义的链表结构灵活。在 Rust 中实现自定义链表涉及到一些高级的所有权和借用规则，尤其是在涉及裸指针和安全内存管理时。
-
-### Rust 链表的基本组成
-
-1. **节点定义**：
-   - 在 Rust 中，链表通常由节点组成，每个节点至少包含两个元素：存储的值和指向下一个节点的指针（在单链表中）。
-   - Rust 中的节点可以使用 `struct` 来定义，其中 `Option<NonNull<Node<T>>>` 通常用于表示指向下一个节点的指针，这种方式比使用 `Box` 更为底层且灵活，但需要更小心地处理内存。
-
-   ```rust
-   #[derive(Debug)]
-   struct Node<T> {
-       val: T,
-       next: Option<NonNull<Node<T>>>,
-   }
-   ```
-
-2. **链表结构**：
-   - 链表通常会有一个结构体表示整个链表，这个结构体可能包含指向链表首尾节点的指针和链表的长度等信息。
-   - 使用 `Option<NonNull<Node<T>>>` 来安全地处理节点指针，避免空指针和野指针问题。
-
-   ```rust
-   #[derive(Debug)]
-   struct LinkedList<T> {
-       length: u32,
-       start: Option<NonNull<Node<T>>>,
-       end: Option<NonNull<Node<T>>>,
-   }
-   ```
-
-### 链表操作
-
-1. **添加节点**：
-   - 向链表中添加节点通常涉及修改链表的尾节点指针和可能的头节点指针。
-   - 必须正确地处理所有权和借用，尤其是在更新节点指针时。
-
-   ```rust
-   impl<T> LinkedList<T> {
-       pub fn add(&mut self, obj: T) {
-           let mut node = Box::new(Node::new(obj));
-           let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
-   
-           match self.end {
-               None => self.start = node_ptr,
-               Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
-           }
-           self.end = node_ptr;
-           self.length += 1;
-       }
-   }
-   ```
-
-2. **合并链表**：
-   - 合并两个链表要求遍历两个链表并根据节点值的大小顺序重新链接节点。
-   - 实现合并时，应考虑不破坏原有链表结构，合并操作应生成一个新的链表或在其中一个链表上就地修改。
-
-   ```rust
-   pub fn merge(list_a: LinkedList<T>, list_b: LinkedList<T>) -> Self {
-       // 合并算法实现，可以采用迭代或递归方式
-   }
-   ```
-
-### 性能和安全性
-
-- Rust 的所有权和借用规则在自定义链表实现中显得尤为重要，因为不正确的内存管理会导致程序崩溃或数据损坏。
-- 链表操作的性能可能不如数组和其他连续内存数据结构，特别是在随机访问数据时。但在插入和删除操作中，链表通常能提供更优的性能，尤其是对于大型数据元素。
 
 ## 关于`Option<NonNull<Node<T>>>`
 
@@ -427,5 +764,3 @@ self.end = node_ptr;
 
 ### 7. 元编程
 - **宏**：使用宏来减少重复代码，例如自动实现某些链表操作或特质。
-
-这些知识点涵盖了从内存管理到并发处理，从错误控制到元编程的多个方面，都是在实现和使用 Rust 链表时需要考虑的重要内容。通过理解和应用这些概念，可以有效地构建安全和高效的数据结构。

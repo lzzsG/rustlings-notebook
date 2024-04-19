@@ -224,6 +224,142 @@ fn bracket_match(bracket: &str) -> bool {
 
 这段代码将 `pop` 方法完善，并在 `bracket_match` 函数中实现了使用栈进行括号匹配的逻辑。通过遍历输入的字符串，并针对不同类型的字符执行相应的栈操作，我们可以验证括号是否正确匹配。
 
+---
+
+## 代码解释
+
+这段代码定义了一个通用的栈 `Stack<T>` 结构，并提供了用于检查括号匹配的 `bracket_match` 函数。我将详细解释每个部分的功能和实现。
+
+### 1. 栈的定义和实现
+
+```rust
+#[derive(Debug)]
+struct Stack<T> {
+    size: usize,
+    data: Vec<T>,
+}
+```
+
+- **结构体定义**: `Stack` 是一个泛型结构体，包含两个字段：
+  - `size`: 表示栈的当前元素数量。
+  - `data`: 使用 Rust 的 `Vec<T>` 存储栈的元素。
+
+#### 方法实现
+
+```rust
+impl<T> Stack<T> {
+    fn new() -> Self {
+        Self {
+            size: 0,
+            data: Vec::new(),
+        }
+    }
+```
+- **`new` 方法**: 创建一个空栈。初始 `size` 为0，`data` 为空向量。
+
+```rust
+    fn is_empty(&self) -> bool {
+        0 == self.size
+    }
+```
+- **`is_empty` 方法**: 检查栈是否为空，如果 `size` 为0则返回 `true`。
+
+```rust
+    fn len(&self) -> usize {
+        self.size
+    }
+```
+- **`len` 方法**: 返回栈的元素数量。
+
+```rust
+    fn clear(&mut self) {
+        self.size = 0;
+        self.data.clear();
+    }
+```
+- **`clear` 方法**: 清空栈中的所有元素，将 `size` 重置为0，并清空 `data`。
+
+```rust
+    fn push(&mut self, val: T) {
+        self.data.push(val);
+        self.size += 1;
+    }
+```
+- **`push` 方法**: 向栈中添加一个元素。这里元素被添加到 `data` 的尾部，并且 `size` 增加1。
+
+```rust
+    fn pop(&mut self) -> Option<T> {
+        if !self.is_empty() {
+            self.size -= 1;
+            self.data.pop()
+        } else {
+            None
+        }
+    }
+```
+- **`pop` 方法**: 从栈中移除并返回最后一个元素。如果栈不为空，则减少 `size` 并从 `data` 中弹出元素。
+
+```rust
+    fn peek(&self) -> Option<&T> {
+        if 0 == self.size {
+            return None;
+        }
+        self.data.get(self.size - 1)
+    }
+```
+- **`peek` 方法**: 返回栈顶元素的引用，不移除它。如果栈为空，则返回 `None`。
+
+```rust
+    fn peek_mut(&mut self) -> Option<&mut T> {
+        if 0 == self.size {
+            return None;
+        }
+        self.data.get_mut(self.size - 1)
+    }
+```
+- **`peek_mut` 方法**: 返回栈顶元素的可变引用，不移除它。如果栈为空，则返回 `None`。
+
+### 2. 迭代器实现
+
+- **`IntoIter`**: 为栈实现了 `IntoIter` 迭代器，允许消耗栈中的所有元素。
+- **`Iter` 和 `IterMut`**: 分别为不可变和可变引用的迭代器。这些迭代器的实现通过在内部使用 `Vec` 存储引用，并逐个弹出。
+
+### 3. 括号匹配函数
+
+```rust
+fn bracket_match(bracket: &str) -> bool {
+    let mut stack = Stack::new();
+    let brackets = bracket.chars();
+
+    for ch in brackets {
+        match ch {
+            '(' | '{' | '[' => stack.push(ch),
+            ')' => {
+                if stack.pop() != Some('(') {
+                    return false;
+                }
+            },
+            '}' => {
+                if stack.pop() != Some('{') {
+                    return false;
+                }
+            },
+            ']' => {
+                if stack.pop() != Some('[') {
+                    return false;
+                }
+            },
+            _ => (),
+        }
+    }
+
+    stack.is_empty()
+}
+```
+- **`bracket_match` 函数**: 使用 `Stack` 来检查字符串中的括号是否正确匹配。对于每个打开的括号，它将其推入栈中。对于每个关闭的括号，它检查栈顶的括号是否为对应的开括号。如果不匹配或栈为空时遇到关闭括号，返回 `false`。最终，如果栈为空，表示所有括号都正确匹配，否则返回 `false`。
+
+---
+
 ## 扩展知识点与解答：
 
 ### 扩展知识点

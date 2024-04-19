@@ -203,6 +203,120 @@ where
 ```
 这些方法提供了二叉搜索树的基本操作框架，可以根据需要进一步扩展或优化。
 
+二叉搜索树（BST）的基本操作主要包括插入和查找，这些操作通常以递归或迭代的方式实现。上面的实现使用了递归方法，它相对简单直观。除此之外还可以考虑以下几种不同的解法：
+
+### 1. 迭代实现
+
+递归的方法虽然直观，但在某些情况下可能会导致栈溢出，特别是在处理非常大的数据集时。迭代实现可以避免这个问题。
+
+#### 插入操作（迭代方式）
+
+```rust
+impl<T> BinarySearchTree<T>
+where
+    T: Ord,
+{
+    // 迭代插入值到二叉搜索树
+    fn insert(&mut self, value: T) {
+        let mut current = &mut self.root;
+        while let Some(ref mut node) = current {
+            match value.cmp(&node.value) {
+                Ordering::Less => current = &mut node.left,
+                Ordering::Greater => current = &mut node.right,
+                Ordering::Equal => return, // 如果存在相同的值，则不插入
+            }
+        }
+        *current = Some(Box::new(TreeNode::new(value)));
+    }
+}
+```
+
+#### 查找操作（迭代方式）
+
+```rust
+impl<T> BinarySearchTree<T>
+where
+    T: Ord,
+{
+    // 迭代方式在二叉搜索树中查找值
+    fn search(&self, value: T) -> bool {
+        let mut current = &self.root;
+        while let Some(ref node) = current {
+            match value.cmp(&node.value) {
+                Ordering::Equal => return true,
+                Ordering::Less => current = &node.left,
+                Ordering::Greater => current = &node.right,
+            }
+        }
+        false
+    }
+}
+```
+
+### 2. 增加重复值处理
+
+在一些应用中，可能需要在二叉搜索树中存储重复值。一种常见的处理方法是将重复值存储在右子树。
+
+#### 修改插入逻辑以允许重复值
+
+```rust
+impl<T> TreeNode<T>
+where
+    T: Ord,
+{
+    fn insert(&mut self, value: T) {
+        match value.cmp(&self.value) {
+            Ordering::Less => {
+                if let Some(ref mut left) = self.left {
+                    left.insert(value);
+                } else {
+                    self.left = Some(Box::new(TreeNode::new(value)));
+                }
+            }
+            Ordering::Greater | Ordering::Equal => { // 现在允许重复值，并将它们放在右侧
+                if let Some(ref mut right) = self.right {
+                    right.insert(value);
+                } else {
+                    self.right = Some(Box::new(TreeNode::new(value)));
+                }
+            }
+        }
+    }
+}
+```
+
+### 3. 非递归的中序遍历
+
+有时候，为了验证二叉搜索树的正确性，可以实现一个非递归的中序遍历，它应该返回一个有序的序列。
+
+```rust
+impl<T> BinarySearchTree<T>
+where
+    T: Ord,
+{
+    // 非递归中序遍历
+    fn in_order_traversal(&self) -> Vec<&T> {
+        let mut result = Vec::new();
+        let mut stack = Vec::new();
+        let mut current = &self.root;
+
+        while current.is_some() || !stack.is_empty() {
+            while let Some(ref node) = current {
+                stack.push(node);
+                current = &node.left;
+            }
+            current = stack.pop().unwrap();
+            result.push(&current.as_ref().unwrap().value);
+            current = &current.as_ref().unwrap().right;
+        }
+
+        result
+    }
+}
+```
+
+这些解法展示了如何通过不同方式实现和扩展二叉搜索树的功能。每种方法都有其适用场景和优势，选择哪种实现方式取决于具体的应用需求和环境限制。
+
 ## 扩展知识点与解答：
 
 ### 扩展知识点

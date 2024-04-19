@@ -140,58 +140,193 @@ mod tests {
 
 ### 解题方法
 
-1. **初始化**:
-   - 创建两个队列 `q1` 和 `q2` 来存储栈元素。
+在这个问题中，我们需要使用两个队列（`q1` 和 `q2`）来模拟一个栈的行为。一个栈的主要操作包括 `push`（压栈）和 `pop`（出栈），栈是一种后进先出（LIFO）的数据结构。我们将展示如何使用先进先出（FIFO）的队列来模拟这种后进先出的行为。
 
-2. **Push 操作**:
-   - 将元素加入到非空的队列（如果两个队列都空，则选择任意一个）。
+1. **Push 操作**：始终在 `q1` 中添加元素。如果 `q1` 为空，则直接在 `q1` 中添加元素；如果 `q1` 不为空，则先将 `q1` 中的所有元素转移到 `q2`，将新元素添加到 `q1`，然后将 `q2` 中的所有元素转移回 `q1`。这样可以保证最后加入的元素总是在 `q1` 的前端，实现栈的后进先出特性。
 
-3. **Pop 操作**:
-   - 将非空队列中的所有元素（除最后一个元素外）移动到另一个空队列，然后移除并返回最后一个元素。
-   - 这个操作模拟了栈的 LIFO 特性。
+2. **Pop 操作**：直接从 `q1` 的前端移除并返回元素，这个元素就是最后添加的元素，符合栈的后进先出特性。
 
-4. **isEmpty 操作**:
-   - 如果两个队列都为空，则栈为空。
+3. **IsEmpty 操作**：检查 `q1` 是否为空。
 
-### 代码示例
-
-这里提供了一个基本框架来实现 `push`、`pop` 和 `is_empty` 操作。具体的实现需要根据队列的基本操作（如 `enqueue` 和 `dequeue`）来完成。
+### 代码实现
 
 ```rust
+#[derive(Debug)]
+pub struct myStack<T> {
+    q1: Queue<T>,
+    q2: Queue<T>,
+}
+
 impl<T> myStack<T> {
+    pub fn new() -> Self {
+        Self {
+            q1: Queue::new(),
+            q2: Queue::new(),
+        }
+    }
+
     pub fn push(&mut self, elem: T) {
-        // 将元素总是加入到 q1
+        // 将 q1 中的所有元素移到 q2
+        while let Ok(item) = self.q1.dequeue() {
+            self.q2.enqueue(item);
+        }
+
+        // 新元素入队到 q1
         self.q1.enqueue(elem);
+
+        // 将 q2 中的所有元素回移至 q1
+        while let Ok(item) = self.q2.dequeue() {
+            self.q1.enqueue(item);
+        }
     }
 
     pub fn pop(&mut self) -> Result<T, &str> {
-        if self.is_empty() {
-            return Err("Stack is empty");
-        }
-
-        // 将 q1 中的元素移至 q2，直到 q1 中只剩一个元素
-        while self.q1.size() > 1 {
-            if let Some(val) = self.q1.dequeue().ok() {
-                self.q2.enqueue(val);
-            }
-        }
-
-        // q1 的最后一个元素即为栈顶元素
-        let result = self.q1.dequeue();
-
-        // 交换 q1 和 q2
-        std::mem::swap(&mut self.q1, &mut self.q2);
-
-        result
+        // 直接从 q1 中移除并返回第一个元素
+        self.q1.dequeue()
     }
 
     pub fn is_empty(&self) -> bool {
-        self.q1.is_empty() && self.q2.is_empty()
+        self.q1.is_empty()
     }
 }
 ```
 
-这个实现利用了两个队列来模拟一个栈的行为，每次 `pop` 操作都通过移动元素来确保最后加入的元素能够第一个出来，从而满足栈的后进先出特性。
+---
+
+## 代码解释
+
+本题代码中，我们有两个主要的数据结构：`Queue<T>` 和 `myStack<T>`。`Queue<T>` 是一个使用 `Vec<T>` 实现的简单队列，而 `myStack<T>` 则是使用两个 `Queue<T>` 实现的栈。这里，我们将详细解释每个部分的功能和实现。
+
+### 队列的实现 (`Queue<T>`)
+
+```rust
+#[derive(Debug)]
+pub struct Queue<T> {
+    elements: Vec<T>,
+}
+```
+- **`Queue<T>`** 是一个泛型结构体，包含一个字段 `elements`，这是一个动态数组（`Vec<T>`），用来存储队列的元素。
+
+#### 队列的方法
+
+```rust
+impl<T> Queue<T> {
+    pub fn new() -> Queue<T> {
+        Queue {
+            elements: Vec::new(),
+        }
+    }
+```
+- **`new` 方法**：创建一个新的空队列，`elements` 初始化为一个空的 `Vec<T>`。
+
+```rust
+    pub fn enqueue(&mut self, value: T) {
+        self.elements.push(value)
+    }
+```
+- **`enqueue` 方法**：在队列的尾部添加一个元素。使用 `Vec::push` 方法来添加元素，这是队列的基本操作之一。
+
+```rust
+    pub fn dequeue(&mut self) -> Result<T, &str> {
+        if !self.elements.is_empty() {
+            Ok(self.elements.remove(0))
+        } else {
+            Err("Stack is empty")
+        }
+    }
+```
+- **`dequeue` 方法**：从队列的前端移除并返回元素。如果队列不为空，使用 `Vec::remove(0)` 移除并返回第一个元素；如果为空，则返回一个错误。
+
+```rust
+    pub fn peek(&self) -> Result<&T, &str> {
+        match self.elements.first() {
+            Some(value) => Ok(value),
+            None => Err("Stack is empty"),
+        }
+    }
+```
+- **`peek` 方法**：查看队列前端的元素但不移除。使用 `Vec::first` 方法来获取第一个元素的引用。
+
+```rust
+    pub fn size(&self) -> usize {
+        self.elements.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.elements.is_empty()
+    }
+}
+```
+- **`size` 和 `is_empty` 方法**：返回队列中元素的数量和检查队列是否为空。
+
+#### 默认实现
+
+```rust
+impl<T> Default for Queue<T> {
+    fn default() -> Queue<T> {
+        Queue::new()
+    }
+}
+```
+- **`Default` 特性实现**：提供创建队列的默认方式，简单调用 `new` 方法。
+
+### 栈的实现 (`myStack<T>`)
+
+```rust
+pub struct myStack<T> {
+    q1: Queue<T>,
+    q2: Queue<T>,
+}
+```
+- **`myStack<T>`**：使用两个队列 (`q1` 和 `q2`) 来模拟栈的后进先出 (LIFO) 行为。
+
+#### 栈的方法
+
+```rust
+impl<T> myStack<T> {
+    pub fn new() -> Self {
+        Self {
+            q1: Queue::<T>::new(),
+            q2: Queue::<T>::new(),
+        }
+    }
+```
+- **`new` 方法**：初始化一个新的栈，其中包含两个空队列。
+
+```rust
+    pub fn push(&mut self, elem: T) {
+        while let Ok(item) = self.q1.dequeue() {
+            self.q2.enqueue(item);
+        }
+
+        self.q1.enqueue(elem);
+
+        while let Ok(item) = self.q2.dequeue() {
+            self.q1.enqueue(item);
+        }
+    }
+```
+- **`push` 方法**：实现栈的 `push` 操作。首先，将 `q1` 中的所有元素移到 `q2`，然后将新元素放入 `q1`，最后将 `q2` 中的所有元素移回 `q1`。这确保了最后插入的元素始终在 `q1` 的前端，实现了栈的 LIFO 特性。
+
+```rust
+    pub fn pop(&mut self) -> Result<T, &str> {
+        self.q1.dequeue()
+    }
+```
+- **`pop` 方法**：实现栈的
+
+ `pop` 操作，直接从 `q1` 中移除并返回前端元素。
+
+```rust
+    pub fn is_empty(&self) -> bool {
+        self.q1.is_empty()
+    }
+```
+- **`is_empty` 方法**：检查栈是否为空，通过查看 `q1` 是否为空来判断。
+
+这种通过两个队列模拟栈的方法虽然在某些操作上效率较低（特别是 `push` 操作），但它很好地展示了如何使用简单的队列结构来实现复杂的数据结构行为。
+
+---
 
 ## 扩展知识点与解答：
 
@@ -222,108 +357,3 @@ impl<T> myStack<T> {
    - 考虑实现一种支持多种操作的 "双端队列栈"，可以从两端进行 `push` 和 `pop` 操作。
    - 这种数据结构可以用来解决更复杂的算法问题，如滑动窗口最大值等。
 
-通过这样的扩展学习，你不仅能够深入理解栈和队列的基本操作，还能掌握它们在实际编程和算法问题中的应用。
-
-## 代码解释
-
-在这个问题中，我们需要使用两个队列 (`Queue`) 实现一个栈 (`myStack`) 的基本功能。下面将详细解释每个部分的实现和工作原理。
-
-### 队列 (`Queue`) 实现
-首先，让我们来看看 `Queue` 的实现，这是实现栈的基础。
-
-#### 构造函数
-构造函数简单地初始化一个空的 `Vec<T>` 来存储队列元素：
-```rust
-pub fn new() -> Queue<T> {
-    Queue {
-        elements: Vec::new(),
-    }
-}
-```
-
-#### 入队 (`enqueue`)
-`enqueue` 方法将一个元素添加到队列的尾部：
-```rust
-pub fn enqueue(&mut self, value: T) {
-    self.elements.push(value)
-}
-```
-这里使用 `Vec::push` 方法，因为在队列中，新元素总是添加到队尾。
-
-#### 出队 (`dequeue`)
-`dequeue` 方法从队列的头部移除元素，并返回它。如果队列为空，则返回一个错误：
-```rust
-pub fn dequeue(&mut self) -> Result<T, &str> {
-    if !self.elements.is_empty() {
-        Ok(self.elements.remove(0))
-    } else {
-        Err("Queue is empty")
-    }
-}
-```
-这里使用 `Vec::remove` 方法从向量的开始位置（索引0）移除元素，这对应于队列的第一个元素。
-
-#### 查看队首元素 (`peek`)
-`peek` 方法返回队列第一个元素的引用，不移除它：
-```rust
-pub fn peek(&self) -> Result<&T, &str> {
-    match self.elements.first() {
-        Some(value) => Ok(value),
-        None => Err("Queue is empty"),
-    }
-}
-```
-这里使用 `Vec::first` 方法，它返回一个 `Option`，表明是否存在元素。
-
-### 栈 (`myStack`) 使用两个队列实现
-接下来，我们看看如何使用两个队列 `q1` 和 `q2` 来模拟栈的操作。
-
-#### 构造函数
-在 `myStack` 的构造函数中，我们初始化两个空队列：
-```rust
-pub fn new() -> Self {
-    Self {
-        q1: Queue::<T>::new(),
-        q2: Queue::<T>::new()
-    }
-}
-```
-
-#### 入栈 (`push`)
-入栈操作简单地将元素加入到 `q1`：
-```rust
-pub fn push(&mut self, elem: T) {
-    self.q1.enqueue(elem);
-}
-```
-
-#### 出栈 (`pop`)
-出栈操作稍微复杂一些，我们需要保证最后加入 `q1` 的元素第一个被移除（后进先出）。为此，我们将 `q1` 的所有元素（除了最后一个）转移到 `q2`，然后移除并返回 `q1` 的最后一个元素。之后，我们交换 `q1` 和 `q2` 的角色，以便下一次操作：
-```rust
-pub fn pop(&mut self) -> Result<T, &str> {
-    if self.is_empty() {
-        return Err("Stack is empty");
-    }
-
-    while self.q1.size() > 1 {
-        if let Some(val) = self.q1.dequeue().ok() {
-            self.q2.enqueue(val);
-        }
-    }
-
-    let result = self.q1.dequeue();
-    std::mem::swap(&mut self.q1, &mut self.q2);
-
-    result
-}
-```
-
-#### 栈是否为空 (`is_empty`)
-检查栈是否为空即检查两个队列是否都为空：
-```rust
-pub fn is_empty(&self) -> bool {
-    self.q1.is_empty() && self.q2.is_empty()
-}
-```
-
-通过这种方式，我们使用两个队列成功地模拟了一个栈的行为。在这个实现中，每个元素最多被移动两次（从 `q1` 到 `q2`，然后在交换后可能再次从新的 `q1`（原来的 `q2`）移动到新的 `q2`（原来的 `q1`））。

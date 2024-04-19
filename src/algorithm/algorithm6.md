@@ -130,6 +130,78 @@ fn dfs_util(&self, v: usize, visited: &mut HashSet<usize>, visit_order: &mut Vec
 
 这个函数体现了 DFS 的核心，即递归地访问每个未被访问过的邻接节点，并在访问过程中记录顺序。通过这种方式，你可以实现对图的完整遍历，并能够返回从任意起点开始的节点访问顺序。
 
+---
+
+## 代码解释
+
+这段代码实现了一个基本的深度优先搜索（DFS, Depth-First Search）算法，用于遍历图。与广度优先搜索（BFS）不同，深度优先搜索在每个分支深入到不能再深入为止时才回溯。下面详细解释这段代码的各个部分：
+
+### 1. 结构定义与初始化
+
+```rust
+use std::collections::HashSet;
+
+struct Graph {
+    adj: Vec<Vec<usize>>,
+}
+
+impl Graph {
+    fn new(n: usize) -> Self {
+        Graph {
+            adj: vec![vec![]; n],
+        }
+    }
+```
+
+- **`HashSet`**: 用于存储已访问节点的集合，提供 O(1) 时间复杂度的查找和插入操作。
+- **`Graph` 结构体**: 表示图的结构，其中 `adj` 属性是一个邻接表，用于存储图中每个顶点的邻接顶点列表。
+- **`new` 方法**: 创建一个具有 `n` 个顶点的图，每个顶点的邻接列表初始化为空。
+
+### 2. 边的添加
+
+```rust
+    fn add_edge(&mut self, src: usize, dest: usize) {
+        self.adj[src].push(dest);
+        self.adj[dest].push(src);
+    }
+```
+
+- **`add_edge` 方法**: 为无向图添加一条边，连接顶点 `src` 和顶点 `dest`。由于是无向图，所以同时在两个顶点的邻接列表中互相添加对方。
+
+### 3. 深度优先搜索的辅助和主函数
+
+```rust
+    fn dfs_util(&self, v: usize, visited: &mut HashSet<usize>, visit_order: &mut Vec<usize>) {
+        visited.insert(v);
+        visit_order.push(v);
+
+        for &adj_node in &self.adj[v] {
+            if !visited.contains(&adj_node) {
+                self.dfs_util(adj_node, visited, visit_order);
+            }
+        }
+    }
+
+    fn dfs(&self, start: usize) -> Vec<usize> {
+        let mut visited = HashSet::new();
+        let mut visit_order = Vec::new();
+        self.dfs_util(start, &mut visited, &mut visit_order);
+        visit_order
+    }
+```
+
+- **`dfs_util` 方法**: 这是 DFS 的核心递归方法，用于从顶点 `v` 开始进行深度优先搜索。
+  - 将当前节点 `v` 标记为已访问，并将其添加到 `visit_order` 中，记录访问顺序。
+  - 遍历当前顶点的所有邻接顶点，如果邻接顶点未被访问过，则递归调用 `dfs_util` 方法。
+- **`dfs` 方法**: 是 DFS 的入口方法，用于初始化访问状态并开始DFS。
+  - 初始化一个空的 `HashSet` 用于存储已访问的节点，以及一个空的 `Vec` 用于记录访问顺序。
+  - 调用 `dfs_util` 从指定的起始顶点 `start` 开始深度优先搜索。
+  - 返回节点的访问顺序列表。
+
+这段代码通过递归的方式实现了深度优先搜索，能够遍历图中所有从指定起点可达的顶点。DFS 是图遍历的基础，广泛应用于许多算法中，如寻找图中的连通分量、检测环、寻找图的拓扑排序等。
+
+---
+
 ## 扩展知识点与解答：
 
 ### 扩展知识点

@@ -1,4 +1,4 @@
-# 111 The Final Challenge 
+# 111 The Final Challenge
 
 ```rust
 // 运行以下代码开启最终挑战
@@ -111,12 +111,12 @@ function checkAnswers() {
             allAnswered = false;
         }
     });
-    
+
       // Hide all alerts first
     document.getElementById('successAlert').style.display = 'none';
     document.getElementById('errorAlert').style.display = 'none';
     document.getElementById('incompleteAlert').style.display = 'none';
-    
+
     // Display the appropriate alert
     if (!allAnswered) {
         document.getElementById('incompleteAlert').style.display = 'block';

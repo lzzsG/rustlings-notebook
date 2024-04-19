@@ -170,6 +170,80 @@ where
 
 这段代码实现了基本的 BFS 遍历，通过队列管理待访问的节点，并通过数组跟踪已访问节点。通过测试可以验证算法的正确性，包括能处理不同类型的图结构，如有环图、不同起始节点的图等。
 
+---
+
+## 代码解释
+
+### 1. 导入和结构定义
+
+```rust
+use std::collections::VecDeque;
+
+// Define a graph
+struct Graph {
+    adj: Vec<Vec<usize>>,
+}
+```
+
+- **`VecDeque`**: 用于实现 BFS 的队列。`VecDeque` 是 Rust 的双端队列实现，可以高效地从队列的两端添加或移除元素。
+- **`Graph` 结构体**: 这个结构体代表图，其中 `adj` 属性是一个邻接表，存储图中每个顶点的邻接顶点。`adj` 是一个向量的向量，外层向量的每个元素表示一个顶点，内层向量包含该顶点直接连接的其他顶点。
+
+### 2. 图的构造和边的添加
+
+```rust
+impl Graph {
+    // Create a new graph with n vertices
+    fn new(n: usize) -> Self {
+        Graph {
+            adj: vec![vec![]; n],
+        }
+    }
+
+    // Add an edge to the graph
+    fn add_edge(&mut self, src: usize, dest: usize) {
+        self.adj[src].push(dest);
+        self.adj[dest].push(src);
+    }
+}
+```
+
+- **`new` 方法**: 接受一个参数 `n`，表示图中顶点的数量，并创建一个具有 `n` 个顶点的图。每个顶点初始时没有连接的边（每个顶点的邻接列表为空）。
+- **`add_edge` 方法**: 添加一条边到图中。由于这是无向图，所以当添加一条从顶点 `src` 到顶点 `dest` 的边时，同时也会在 `dest` 的邻接列表中添加 `src`。
+
+### 3. 广度优先搜索实现
+
+```rust
+fn bfs_with_return(&self, start: usize) -> Vec<usize> {
+    let mut queue = VecDeque::new();
+    let mut visited = vec![false; self.adj.len()];
+    let mut visit_order = Vec::new();
+
+    // Start from the given node
+    queue.push_back(start);
+    visited[start] = true;
+
+    while let Some(node) = queue.pop_front() {
+        visit_order.push(node);
+        for &adj_node in &self.adj[node] {
+            if !visited[adj_node] {
+                visited[adj_node] = true;
+                queue.push_back(adj_node);
+            }
+        }
+    }
+    visit_order
+}
+```
+
+- **初始化**: 创建一个队列 `queue` 来存放待访问的节点，一个布尔向量 `visited` 来跟踪每个节点的访问状态，以及一个向量 `visit_order` 来记录访问顺序。
+- **起始节点**: 将起始节点 `start` 加入队列，并标记为已访问。
+- **遍历过程**: 使用 `while` 循环，每次从队列中取出一个节点（`node`），并将其添加到 `visit_order` 中。然后遍历这个节点的所有邻接节点，如果邻接节点未被访问，则标记为已访问，并加入队列。这个过程一直进行，直到队列为空。
+- **返回结果**: `visit_order` 向量包含了按访问顺序的顶点索引。
+
+这种方式使用广度优先搜索遍历图，能够确保从起始节点出发按层次访问所有可达的节点，非常适合解决如最短路径等问题。
+
+---
+
 ## 扩展知识点与解答：
 
 ### 扩展知识点

@@ -218,6 +218,153 @@ pub fn reverse(&mut self) {
 
 此代码中使用了 `unsafe` 块，因为它直接操作裸指针。这种方式在处理双向链表时很常见，但需要特别注意安全性，避免出现内存错误。
 
+---
+
+### 数据结构定义
+
+#### Node 结构体
+
+定义双向链表节点，包含值、指向下一个节点的指针和指向前一个节点的指针。
+
+```rust
+#[derive(Debug)]
+struct Node<T> {
+    val: T,
+    next: Option<NonNull<Node<T>>>,
+    prev: Option<NonNull<Node<T>>>,
+}
+
+impl<T> Node<T> {
+    fn new(t: T) -> Node<T> {
+        Node {
+            val: t,
+            prev: None,
+            next: None,
+        }
+    }
+}
+```
+
+- `val`: 存储节点数据。
+- `prev`: 指向前一个节点的指针，使用 `Option<NonNull<Node<T>>>` 确保安全性。
+- `next`: 指向下一个节点的指针。
+
+#### LinkedList 结构体
+
+定义链表，包括链表长度以及指向头部和尾部节点的指针。
+
+```rust
+#[derive(Debug)]
+struct LinkedList<T> {
+    length: u32,
+    start: Option<NonNull<Node<T>>>,
+    end: Option<NonNull<Node<T>>>,
+}
+```
+
+- `length`: 链表的节点数。
+- `start`: 指向链表头部的指针。
+- `end`: 指向链表尾部的指针。
+
+### 核心方法
+
+#### add 方法
+
+向链表尾部添加新节点，并适当设置 `prev` 和 `next` 指针。
+
+```rust
+pub fn add(&mut self, obj: T) {
+    let mut node = Box::new(Node::new(obj));
+    node.next = None;
+    node.prev = self.end;
+    let node_ptr = Some(unsafe { NonNull::new_unchecked(Box::into_raw(node)) });
+
+    match self.end {
+        None => self.start = node_ptr,
+        Some(end_ptr) => unsafe { (*end_ptr.as_ptr()).next = node_ptr },
+    }
+    self.end = node_ptr;
+    self.length += 1;
+}
+```
+
+- 创建一个新节点，并将其 `prev` 指针指向当前的尾节点。
+- 更新旧的尾节点的 `next` 指针指向新节点。
+- 更新链表的 `end` 指针和长度。
+
+#### reverse 方法
+
+反转链表，即交换每个节点的 `prev` 和 `next` 指针，并交换链表的头尾指针。
+
+```rust
+pub fn reverse(&mut self) {
+    let mut current = self.start;
+    let mut temp = None;
+    while let Some(mut node) = current {
+        unsafe {
+            temp = node.as_mut().next;
+            node.as_mut().next = node.as_mut().prev;
+            node.as_mut().prev = temp;
+        }
+        current = temp;
+    }
+    std::mem::swap(&mut self.start, &mut self.end);
+}
+```
+
+- 遍历链表，对每个节点交换其 `prev` 和 `next`。
+- 完成遍历后，交换链表的头尾指针。
+
+### 显示方法
+
+#### Display for LinkedList
+
+实现 `Display` 特征，以便于打印链表的内容。
+
+```rust
+impl<T> Display for LinkedList<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let mut current = self.start;
+        while let Some(node) = current {
+            unsafe {
+                write!(f, "{} -> ", (*node.as_ptr()).val)?;
+                current = (*node.as_ptr()).next;
+            }
+        }
+        write!(f, "None")
+    }
+}
+```
+
+- 从头节点开始，遍历链表并打印每个节点的值。
+
+#### Display for Node
+
+实现 `Display` 特征，以便于单独打印节点的信息。
+
+```rust
+impl<T> Display for Node<T>
+where
+    T: Display,
+{
+    fn fmt(&self, f: &mut Formatter) ->
+
+ fmt::Result {
+        match self.next {
+            Some(node) => write!(f, "{}, {}", self.val, unsafe { node.as_ref() }),
+            None => write!(f, "{}", self.val),
+        }
+    }
+}
+```
+
+- 打印节点值，如果有后继节点则连同后继节点的值一起打印。
+
+---
+
 ### 扩展知识点：
 
 1. **裸指针的使用**：
