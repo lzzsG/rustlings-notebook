@@ -111,6 +111,8 @@
 
 # 更新记录
 
+【4/19】 reviewed and fixed, release version 1
+
 【4/18】 add 111, review and typesetting
 
 【4/17】 add 89-110 finish and "start"
