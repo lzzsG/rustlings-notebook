@@ -48,68 +48,66 @@ fn main() {
 
 ---
 
-### 本题内容：
+### 本题内容
 
-这个练习目的是通过修复几个常见的编程错误和改进代码质量，展示 Clippy 工具在日常编程中的实际应用。通过解决这些问题，学习者可以加深对 Rust 编程惯用法的理解。
+本练习的目标是通过修改一段有错误和低效代码的示例来展示 Rust 的代码审查工具 Clippy 的实用性。学生将学习如何识别和修复常见的编程错误和潜在的代码陷阱，同时提高代码的清晰度和效率。
 
-### 相关知识点：
+### 相关知识点
 
-1. **Option 类型的正确处理**：
-   - `Option` 类型是 Rust 中的枚举，用于可能存在或不存在的值。正确地检查和处理 `Option` 值是避免运行时错误的关键。
+1. **`Option` 类型的使用**：正确处理 `Option` 类型，避免在 `None` 的情况下调用 `unwrap()`，这会导致程序崩溃。
+2. **数组和向量的初始化与操作**：正确初始化数组，避免语法错误。了解向量的 `resize` 方法和其正确的使用场景。
+3. **变量交换**：理解如何正确交换两个变量的值。
 
-2. **数组和向量的正确声明和使用**：
-   - 数组和向量是存储数据集合的常用结构。正确地声明和初始化这些结构对于保证程序逻辑和性能至关重要。
+### 解题方法
 
-3. **变量值的交换**：
-   - 在不使用额外空间的情况下交换两个变量的值是一个常见的编程任务，需要正确处理以避免逻辑错误。
+#### 步骤描述：
 
-### 解题方法：
+1. **修正`Option`的使用**：不要在检查 `Option` 为 `None` 后调用 `unwrap()`。
+2. **修正数组的定义**：数组元素之间应正确使用逗号分隔。
+3. **修正向量的使用**：使用 `clear()` 方法而不是 `resize()` 来清空向量。
+4. **修正变量交换逻辑**：使用 `std::mem::swap()` 是 Rust 中交换两个变量值的标准方法。
 
-1. **修复 `Option` 检查和处理**：
-   - 使用 `if let` 或 `match` 语句来安全地解包 `Option`，而不是使用 `unwrap()`，这可能会在值为 `None` 时引发 panic。
+#### 代码示例：
 
-2. **纠正数组和向量的声明**：
-   - 修复数组的声明，确保所有元素都正确分隔。
-   - 使用合适的方法来清空向量或重新初始化向量。
-
-3. **正确实现变量交换**：
-   - 使用 Rust 的多重赋值特性来交换两个变量的值，而不是通过中间变量。
-
-### 代码示例：
-
-修正后的示例代码如下：
+这里是修改后的 `clippy3.rs` 文件：
 
 ```rust
-// clippy3.rs
+use std::mem;
 
 #[allow(unused_variables, unused_assignments)]
 fn main() {
     let my_option: Option<()> = None;
-    // 使用 if let 来安全地处理 Option
-    if let Some(_) = my_option {
-        println!("Option was something!");
-    } else {
-        println!("Option was nothing!");
+    if my_option.is_none() {
+        println!("Option is none, nothing to unwrap!");
     }
 
-    // 修复数组的声明
-    let my_arr = &[-1, -2, -3, -4, -5, -6];
+    let my_arr = &[
+        -1, -2, -3,
+        -4, -5, -6
+    ];  // 添加了逗号分隔数组元素
     println!("My array! Here it is: {:?}", my_arr);
 
-    // 正确清空向量
     let mut my_empty_vec = vec![1, 2, 3, 4, 5];
-    my_empty_vec.clear();
+    my_empty_vec.clear();  // 使用 clear 方法清空向量
     println!("This Vec is empty, see? {:?}", my_empty_vec);
 
-    // 正确交换两个变量的值
     let mut value_a = 45;
     let mut value_b = 66;
-    std::mem::swap(&mut value_a, &mut value_b);
+    // 使用 std::mem::swap 来交换两个变量的值
+    mem::swap(&mut value_a, &mut value_b);
     println!("value a: {}; value b: {}", value_a, value_b);
 }
+
 ```
 
-通过这种方式，代码不仅避免了潜在的运行时错误，也更加清晰和高效。同时，这个练习也展示了如何根据 Clippy 的建议来改进代码质量。
+### 说明：
+
+- **`Option`处理**：避免在检查 `Option` 为 `None` 后立即调用 `unwrap()`，因为这是不安全的。
+- **数组语法**：修复了数组初始化中的语法错误，确保元素间正确分隔。
+- **向量操作**：`clear()` 方法移除了向量中的所有元素，这是清空向量最直接和推荐的方法。
+- **变量交换**：`std::mem::swap(&mut value_a, &mut value_b)` 直接交换 `value_a` 和 `value_b` 的值，这种方法不需要第三个变量，减少了变量的使用和可能的错误。
+
+这些修改示例展示了如何通过简单有效的方式避免常见的编程错误，并利用 Rust 的一些特性来写出更安全、更清晰的代码。
 
 ## 扩展知识点与解答：
 

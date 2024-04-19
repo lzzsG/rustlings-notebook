@@ -6,7 +6,7 @@
 
 If Cow already owns the data it doesn't need to clone it when to_mut() is called.
 
-Check out https://doc.rust-lang.org/std/borrow/enum.Cow.html for documentation
+Check out [https://doc.rust-lang.org/std/borrow/enum.Cow.html ](https://doc.rust-lang.org/std/borrow/enum.Cow.html ) ([Chinese version](https://rustwiki.org/zh-CN/std/borrow/enum.Cow.html)) for documentation
 on the `Cow` type.
 
 
