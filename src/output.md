@@ -52,6 +52,9 @@
 
 12. [**嵌入式 Rust 之书（The Embedded Rust Book）**](https://docs.rust-embedded.org/book/) - 针对希望在嵌入式系统中使用 Rust 的开发者，这本书详细介绍了在无操作系统环境下使用 Rust 的技术和策略。
 
+13. [**Hello，算法**](https://www.hello-algo.com/chapter_hello_algo/) -
+本书旨在通过清晰易懂的动画图解和可运行的代码示例，使读者理解算法和数据结构的核心概念，并能够通过编程来实现它们。
+
 > <span style="color: red;">注意！</span>解答或补充内容可能涉及后续题目内容和答案，酌情选择学习。
 
 > <span style="color: red;">注意！</span>得益于 mdbook 与 Rust Playground 的集成，您可以直接在文档中完成并运行练习。但 Playground 环境与 Rustlings 的运行环境可能不同，某些题目的运行结果可能达不到预期效果。
